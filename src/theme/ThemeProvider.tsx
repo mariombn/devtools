@@ -26,7 +26,12 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('theme-mode');
-    return (saved as 'light' | 'dark') || 'light';
+    // Se não tiver valor salvo ou se for 'light', retorna 'dark' como padrão
+    if (!saved) {
+      localStorage.setItem('theme-mode', 'dark');
+      return 'dark';
+    }
+    return saved as 'light' | 'dark';
   });
 
   const toggleTheme = () => {

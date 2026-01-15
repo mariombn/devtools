@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  devtools:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: devtools
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - devtools-network
+
+networks:
+  devtools-network:
+    driver: bridge

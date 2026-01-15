@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Test</title></head>
+<body>
+<h1>Testing</h1>
+<script>
+  fetch('http://localhost:5173')
+    .then(r => r.text())
+    .then(html => console.log('HTML length:', html.length))
+    .catch(e => console.error('Error:', e));
+</script>
+</body>
+</html>

@@ -1,20 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import { ThemeProvider } from './theme/ThemeProvider';
 
-// Importações da fonte Roboto (pesos comuns)
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+const rootElement = document.getElementById('root');
 
-// CssBaseline: Reseta o CSS do navegador para um padrão consistente
-import CssBaseline from '@mui/material/CssBaseline';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    {/* CssBaseline deve ficar aqui para normalizar o CSS globalmente */}
-    <CssBaseline />
-    <App />
-  </React.StrictMode>,
-)
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </React.StrictMode>,
+  );
+} else {
+  console.error('Root element not found!');
+}

@@ -10,12 +10,21 @@ interface CopyButtonProps {
 
 export function CopyButton({ text, size = 'small' }: CopyButtonProps) {
   const { copy, copied } = useClipboard();
+  const disabled = !text;
+
+  const handleCopy = () => {
+    if (text) {
+      copy(text);
+    }
+  };
 
   return (
-    <Tooltip title={copied ? 'Copied!' : 'Copy to clipboard'}>
-      <IconButton onClick={() => copy(text)} size={size}>
-        {copied ? <CheckIcon fontSize="small" color="success" /> : <ContentCopyIcon fontSize="small" />}
-      </IconButton>
+    <Tooltip title={disabled ? 'No content to copy' : copied ? 'Copied!' : 'Copy to clipboard'}>
+      <span>
+        <IconButton onClick={handleCopy} size={size} disabled={disabled}>
+          {copied ? <CheckIcon fontSize="small" color="success" /> : <ContentCopyIcon fontSize="small" />}
+        </IconButton>
+      </span>
     </Tooltip>
   );
 }

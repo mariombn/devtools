@@ -1,40 +1,52 @@
-import { AppBar, Toolbar, Typography, IconButton, Box } from '@mui/material';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useTheme } from '../../theme/ThemeProvider';
+import { Moon, Sun, Menu } from 'lucide-react'
+import { useTheme } from '@/theme/ThemeProvider'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface TopBarProps {
-  title: string;
-  onMenuClick: () => void;
+  title: string
+  onMenuClick: () => void
 }
 
 export function TopBar({ title, onMenuClick }: TopBarProps) {
-  const { mode, toggleTheme } = useTheme();
+  const { mode, toggleTheme } = useTheme()
 
   return (
-    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          onClick={onMenuClick}
-          sx={{ mr: 2, display: { sm: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
+    <header
+      className={cn(
+        'sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80',
+        'sm:gap-4 sm:px-6'
+      )}
+    >
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden -ml-1"
+        aria-label="Abrir menu"
+        onClick={onMenuClick}
+      >
+        <Menu className="size-5" />
+      </Button>
 
-        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-          {title}
-        </Typography>
+      <h1 className="flex-1 truncate text-base font-semibold tracking-tight text-foreground sm:text-lg">
+        {title}
+      </h1>
 
-        <Box>
-          <IconButton onClick={toggleTheme} color="inherit">
-            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  );
+      <Button
+        variant="ghost"
+        size="icon"
+        className="rounded-lg"
+        aria-label={mode === 'dark' ? 'Modo claro' : 'Modo escuro'}
+        onClick={toggleTheme}
+      >
+        <span key={mode} className="animate-icon-blur inline-flex">
+          {mode === 'dark' ? (
+            <Sun className="size-5" />
+          ) : (
+            <Moon className="size-5" />
+          )}
+        </span>
+      </Button>
+    </header>
+  )
 }

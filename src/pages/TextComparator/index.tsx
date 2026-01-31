@@ -1,248 +1,201 @@
-import { useState } from 'react';
-import {
-  Box,
-  Grid,
-  TextField,
-  Paper,
-  Typography,
-  ToggleButtonGroup,
-  ToggleButton,
-  Stack,
-} from '@mui/material';
-import ViewStreamIcon from '@mui/icons-material/ViewStream';
-import ViewColumnIcon from '@mui/icons-material/ViewColumn';
-import { PageTitle } from '../../components/Common/PageTitle';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
-import * as Diff from 'diff';
+import { useState } from 'react'
+import { Columns, Rows } from 'lucide-react'
+import { PageTitle } from '@/components/Common/PageTitle'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Textarea } from '@/components/ui/textarea'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import * as Diff from 'diff'
+import { cn } from '@/lib/utils'
 
-type ViewMode = 'split' | 'unified';
+type ViewMode = 'split' | 'unified'
 
 export function TextComparator() {
-  const [originalText, setOriginalText] = useLocalStorage('diff-original', '');
-  const [modifiedText, setModifiedText] = useLocalStorage('diff-modified', '');
-  const [viewMode, setViewMode] = useState<ViewMode>('split');
+  const [originalText, setOriginalText] = useLocalStorage('diff-original', '')
+  const [modifiedText, setModifiedText] = useLocalStorage('diff-modified', '')
+  const [viewMode, setViewMode] = useState<ViewMode>('split')
 
-  const getDiff = () => {
-    return Diff.diffLines(originalText, modifiedText);
-  };
+  const getDiff = () => Diff.diffLines(originalText, modifiedText)
+
+  const diffBlockClass = 'rounded border-l-4 px-1 py-0.5 font-mono text-sm whitespace-pre-wrap break-words'
 
   const renderUnifiedView = () => {
-    const diff = getDiff();
+    const diff = getDiff()
 
     return (
-      <Paper
-        elevation={2}
-        sx={{
-          p: 2,
-          fontFamily: 'monospace',
-          fontSize: '14px',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
-          maxHeight: '600px',
-          overflow: 'auto',
-        }}
-      >
-        {diff.map((part, index) => {
-          const color = part.added ? '#d4edda' : part.removed ? '#f8d7da' : 'transparent';
-          const textColor = part.added ? '#155724' : part.removed ? '#721c24' : 'inherit';
-          const prefix = part.added ? '+ ' : part.removed ? '- ' : '  ';
+      <Card className="max-h-[600px] overflow-auto">
+        <CardContent className="p-4 sm:pt-6 font-mono text-sm">
+          {diff.map((part, index) => {
+            const isAdded = part.added
+            const isRemoved = part.removed
+            const bg = isAdded
+              ? 'bg-green-500/15 dark:bg-green-500/20'
+              : isRemoved
+                ? 'bg-red-500/15 dark:bg-red-500/20'
+                : 'bg-transparent'
+            const border = isAdded
+              ? 'border-green-500'
+              : isRemoved
+                ? 'border-red-500'
+                : 'border-transparent'
+            const prefix = isAdded ? '+ ' : isRemoved ? '- ' : '  '
 
-          return (
-            <Box
-              key={index}
-              sx={{
-                backgroundColor: color,
-                color: textColor,
-                padding: '2px 4px',
-                borderLeft: part.added || part.removed ? '3px solid' : 'none',
-                borderLeftColor: part.added ? '#28a745' : part.removed ? '#dc3545' : 'transparent',
-              }}
-            >
-              {part.value.split('\n').map((line, i) => (
-                <div key={i}>
-                  {prefix}
-                  {line}
-                </div>
-              ))}
-            </Box>
-          );
-        })}
-      </Paper>
-    );
-  };
+            return (
+              <div
+                key={index}
+                className={cn(
+                  diffBlockClass,
+                  bg,
+                  border,
+                  isAdded && 'text-green-800 dark:text-green-200',
+                  isRemoved && 'text-red-800 dark:text-red-200'
+                )}
+              >
+                {part.value.split('\n').map((line, i) => (
+                  <div key={i}>
+                    {prefix}
+                    {line}
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+        </CardContent>
+      </Card>
+    )
+  }
 
   const renderSplitView = () => {
-    const diff = getDiff();
+    const diff = getDiff()
 
-    const originalLines: Array<{ text: string; removed?: boolean }> = [];
-    const modifiedLines: Array<{ text: string; added?: boolean }> = [];
+    const originalLines: Array<{ text: string; removed?: boolean }> = []
+    const modifiedLines: Array<{ text: string; added?: boolean }> = []
 
     diff.forEach((part) => {
-      const lines = part.value.split('\n').filter((line) => line !== '');
+      const lines = part.value.split('\n').filter((line) => line !== '')
 
       if (part.removed) {
-        lines.forEach((line) => originalLines.push({ text: line, removed: true }));
+        lines.forEach((line) => originalLines.push({ text: line, removed: true }))
       } else if (part.added) {
-        lines.forEach((line) => modifiedLines.push({ text: line, added: true }));
+        lines.forEach((line) => modifiedLines.push({ text: line, added: true }))
       } else {
         lines.forEach((line) => {
-          originalLines.push({ text: line });
-          modifiedLines.push({ text: line });
-        });
+          originalLines.push({ text: line })
+          modifiedLines.push({ text: line })
+        })
       }
-    });
+    })
 
-    // Equilibrar arrays
-    const maxLength = Math.max(originalLines.length, modifiedLines.length);
-    while (originalLines.length < maxLength) originalLines.push({ text: '' });
-    while (modifiedLines.length < maxLength) modifiedLines.push({ text: '' });
+    const maxLength = Math.max(originalLines.length, modifiedLines.length)
+    while (originalLines.length < maxLength) originalLines.push({ text: '' })
+    while (modifiedLines.length < maxLength) modifiedLines.push({ text: '' })
 
     return (
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 2,
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              maxHeight: '600px',
-              overflow: 'auto',
-            }}
-          >
-            <Typography variant="subtitle2" gutterBottom>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card className="max-h-[600px] overflow-auto">
+          <CardHeader className="py-3">
+            <h3 className="text-sm font-medium text-muted-foreground">
               Original
-            </Typography>
+            </h3>
+          </CardHeader>
+          <CardContent className="space-y-0 p-4 pt-0 font-mono text-sm">
             {originalLines.map((line, index) => (
-              <Box
+              <div
                 key={index}
-                sx={{
-                  backgroundColor: line.removed ? '#f8d7da' : 'transparent',
-                  color: line.removed ? '#721c24' : 'inherit',
-                  padding: '2px 4px',
-                  borderLeft: line.removed ? '3px solid #dc3545' : 'none',
-                }}
+                className={cn(
+                  diffBlockClass,
+                  line.removed && 'border-red-500 bg-red-500/15 text-red-800 dark:bg-red-500/20 dark:text-red-200'
+                )}
               >
                 {line.text || '\u00A0'}
-              </Box>
+              </div>
             ))}
-          </Paper>
-        </Grid>
+          </CardContent>
+        </Card>
 
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 2,
-              fontFamily: 'monospace',
-              fontSize: '14px',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              maxHeight: '600px',
-              overflow: 'auto',
-            }}
-          >
-            <Typography variant="subtitle2" gutterBottom>
+        <Card className="max-h-[600px] overflow-auto">
+          <CardHeader className="py-3">
+            <h3 className="text-sm font-medium text-muted-foreground">
               Modified
-            </Typography>
+            </h3>
+          </CardHeader>
+          <CardContent className="space-y-0 p-4 pt-0 font-mono text-sm">
             {modifiedLines.map((line, index) => (
-              <Box
+              <div
                 key={index}
-                sx={{
-                  backgroundColor: line.added ? '#d4edda' : 'transparent',
-                  color: line.added ? '#155724' : 'inherit',
-                  padding: '2px 4px',
-                  borderLeft: line.added ? '3px solid #28a745' : 'none',
-                }}
+                className={cn(
+                  diffBlockClass,
+                  line.added &&
+                    'border-green-500 bg-green-500/15 text-green-800 dark:bg-green-500/20 dark:text-green-200'
+                )}
               >
                 {line.text || '\u00A0'}
-              </Box>
+              </div>
             ))}
-          </Paper>
-        </Grid>
-      </Grid>
-    );
-  };
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
-    <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-        <PageTitle>Text Comparator</PageTitle>
-        <ToggleButtonGroup
-          value={viewMode}
-          exclusive
-          onChange={(_, newMode) => newMode && setViewMode(newMode)}
-          size="small"
-        >
-          <ToggleButton value="split">
-            <ViewColumnIcon sx={{ mr: 1 }} />
-            Split
-          </ToggleButton>
-          <ToggleButton value="unified">
-            <ViewStreamIcon sx={{ mr: 1 }} />
-            Unified
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Stack>
+    <div>
+      <PageTitle description="Compare two texts and see line-by-line differences.">Text Comparator</PageTitle>
 
-      <Stack spacing={3}>
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper elevation={2} sx={{ p: 2 }}>
-              <Typography variant="h6" gutterBottom>
-                Original Text
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={10}
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <ToggleGroup
+          value={viewMode}
+          onValueChange={(v) => v && setViewMode(v as ViewMode)}
+        >
+          <ToggleGroupItem value="split">
+            <Columns className="size-4" />
+            Split
+          </ToggleGroupItem>
+          <ToggleGroupItem value="unified">
+            <Rows className="size-4" />
+            Unified
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader className="pb-2">
+              <h2 className="text-base font-semibold text-foreground">Original Text</h2>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                className="min-h-[240px] font-mono text-sm"
                 value={originalText}
                 onChange={(e) => setOriginalText(e.target.value)}
                 placeholder="Enter original text here..."
-                sx={{
-                  '& .MuiInputBase-root': {
-                    fontFamily: 'monospace',
-                    fontSize: '14px',
-                  },
-                }}
               />
-            </Paper>
-          </Grid>
+            </CardContent>
+          </Card>
 
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Paper elevation={2} sx={{ p: 2 }}>
-              <Typography variant="h6" gutterBottom>
-                Modified Text
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={10}
+          <Card>
+            <CardHeader className="pb-2">
+              <h2 className="text-base font-semibold text-foreground">Modified Text</h2>
+            </CardHeader>
+            <CardContent>
+              <Textarea
+                className="min-h-[240px] font-mono text-sm"
                 value={modifiedText}
                 onChange={(e) => setModifiedText(e.target.value)}
                 placeholder="Enter modified text here..."
-                sx={{
-                  '& .MuiInputBase-root': {
-                    fontFamily: 'monospace',
-                    fontSize: '14px',
-                  },
-                }}
               />
-            </Paper>
-          </Grid>
-        </Grid>
+            </CardContent>
+          </Card>
+        </div>
 
         {(originalText || modifiedText) && (
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Comparison Result
-            </Typography>
+          <div>
+            <h2 className="mb-4 text-base font-semibold text-foreground">Comparison Result</h2>
             {viewMode === 'split' ? renderSplitView() : renderUnifiedView()}
-          </Box>
+          </div>
         )}
-      </Stack>
-    </Box>
-  );
+      </div>
+    </div>
+  )
 }

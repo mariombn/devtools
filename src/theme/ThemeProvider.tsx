@@ -1,57 +1,53 @@
-import { createContext, useContext, useState, useMemo } from 'react';
-import type { ReactNode } from 'react';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { getTheme } from './theme';
+import { createContext, useContext, useState, useMemo, useLayoutEffect } from 'react'
+import type { ReactNode } from 'react'
 
 interface ThemeContextType {
-  mode: 'light' | 'dark';
-  toggleTheme: () => void;
+  mode: 'light' | 'dark'
+  toggleTheme: () => void
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+// eslint-disable-next-line react-refresh/only-export-components -- useTheme is a hook used by consumers
 export function useTheme() {
-  const context = useContext(ThemeContext);
+  const context = useContext(ThemeContext)
   if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
+    throw new Error('useTheme must be used within ThemeProvider')
   }
-  return context;
+  return context
 }
 
 interface ThemeProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
-    const saved = localStorage.getItem('theme-mode');
-    // Se não tiver valor salvo ou se for 'light', retorna 'dark' como padrão
+    const saved = localStorage.getItem('theme-mode')
     if (!saved) {
-      localStorage.setItem('theme-mode', 'dark');
-      return 'dark';
+      localStorage.setItem('theme-mode', 'dark')
+      return 'dark'
     }
-    return saved as 'light' | 'dark';
-  });
+    return saved as 'light' | 'dark'
+  })
+
+  useLayoutEffect(() => {
+    const root = document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(mode)
+  }, [mode])
 
   const toggleTheme = () => {
     setMode((prevMode) => {
-      const newMode = prevMode === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme-mode', newMode);
-      return newMode;
-    });
-  };
+      const newMode = prevMode === 'light' ? 'dark' : 'light'
+      localStorage.setItem('theme-mode', newMode)
+      return newMode
+    })
+  }
 
-  const theme = useMemo(() => getTheme(mode), [mode]);
-
-  const value = useMemo(() => ({ mode, toggleTheme }), [mode]);
+  const value = useMemo(() => ({ mode, toggleTheme }), [mode])
 
   return (
-    <ThemeContext.Provider value={value}>
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </MuiThemeProvider>
-    </ThemeContext.Provider>
-  );
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  )
 }

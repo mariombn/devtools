@@ -1,14 +1,19 @@
-import { Typography } from '@mui/material';
-import type { ReactNode } from 'react';
+import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 interface PageTitleProps {
-  children: ReactNode;
+  children: ReactNode
+  className?: string
+  description?: string
 }
 
-export function PageTitle({ children }: PageTitleProps) {
+export function PageTitle({ children, className, description }: PageTitleProps) {
   return (
-    <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 3 }}>
+    <div className="mb-8 space-y-2">
+    <h1 className={cn('text-2xl font-semibold tracking-tight text-foreground sm:text-3xl', className)}>
       {children}
-    </Typography>
-  );
+    </h1>
+    {description && <p className="text-muted-foreground">{description}</p>}
+  </div>
+  )
 }

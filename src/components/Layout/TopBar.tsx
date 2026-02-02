@@ -7,9 +7,11 @@ import { useTheme } from '../../theme/ThemeProvider';
 interface TopBarProps {
   title: string;
   onMenuClick: () => void;
+  onDesktopMenuClick: () => void;
+  desktopOpen: boolean;
 }
 
-export function TopBar({ title, onMenuClick }: TopBarProps) {
+export function TopBar({ title, onMenuClick, onDesktopMenuClick, desktopOpen }: TopBarProps) {
   const { mode, toggleTheme } = useTheme();
 
   return (
@@ -20,7 +22,17 @@ export function TopBar({ title, onMenuClick }: TopBarProps) {
           aria-label="open drawer"
           edge="start"
           onClick={onMenuClick}
-          sx={{ mr: 2, display: { sm: 'none' } }}
+          sx={{ mr: 2, display: { xs: 'block', sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        <IconButton
+          color="inherit"
+          aria-label="toggle drawer"
+          edge="start"
+          onClick={onDesktopMenuClick}
+          sx={{ mr: 2, display: { xs: 'none', sm: 'block' } }}
         >
           <MenuIcon />
         </IconButton>

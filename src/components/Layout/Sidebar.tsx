@@ -29,10 +29,11 @@ const menuItems: MenuItem[] = [
 
 interface SidebarProps {
   mobileOpen: boolean;
+  desktopOpen: boolean;
   onClose: () => void;
 }
 
-export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+export function Sidebar({ mobileOpen, desktopOpen, onClose }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,7 +62,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   );
 
   return (
-    <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+    <Box component="nav" sx={{ width: { sm: desktopOpen ? drawerWidth : 0 }, flexShrink: { sm: 0 } }}>
       {/* Mobile drawer */}
       <Drawer
         variant="temporary"
@@ -78,12 +79,16 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       {/* Desktop drawer */}
       <Drawer
-        variant="permanent"
+        variant="persistent"
+        open={desktopOpen}
         sx={{
           display: { xs: 'none', sm: 'block' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          '& .MuiDrawer-paper': { 
+            boxSizing: 'border-box', 
+            width: drawerWidth,
+            transition: 'transform 0.3s ease, width 0.3s ease',
+          },
         }}
-        open
       >
         {drawerContent}
       </Drawer>

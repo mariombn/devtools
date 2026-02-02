@@ -11,21 +11,36 @@ interface MainLayoutProps {
 
 export function MainLayout({ children, title }: MainLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopOpen, setDesktopOpen] = useState(true);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleDesktopDrawerToggle = () => {
+    setDesktopOpen(!desktopOpen);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <TopBar title={title} onMenuClick={handleDrawerToggle} />
-      <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} />
+      <TopBar 
+        title={title} 
+        onMenuClick={handleDrawerToggle}
+        onDesktopMenuClick={handleDesktopDrawerToggle}
+        desktopOpen={desktopOpen}
+      />
+      <Sidebar 
+        mobileOpen={mobileOpen} 
+        desktopOpen={desktopOpen}
+        onClose={handleDrawerToggle} 
+      />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - 240px)` },
+          width: { sm: desktopOpen ? `calc(100% - 240px)` : '100%' },
+          transition: 'width 0.3s ease',
         }}
       >
         <Toolbar />

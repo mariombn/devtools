@@ -8,10 +8,9 @@ interface TopBarProps {
   title: string;
   onMenuClick: () => void;
   onDesktopMenuClick: () => void;
-  desktopOpen: boolean;
 }
 
-export function TopBar({ title, onMenuClick, onDesktopMenuClick, desktopOpen }: TopBarProps) {
+export function TopBar({ title, onMenuClick, onDesktopMenuClick }: TopBarProps) {
   const { mode, toggleTheme } = useTheme();
 
   return (

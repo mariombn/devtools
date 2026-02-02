@@ -27,7 +27,6 @@ export function MainLayout({ children, title }: MainLayoutProps) {
         title={title} 
         onMenuClick={handleDrawerToggle}
         onDesktopMenuClick={handleDesktopDrawerToggle}
-        desktopOpen={desktopOpen}
       />
       <Sidebar 
         mobileOpen={mobileOpen} 

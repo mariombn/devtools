@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: devtools
     restart: unless-stopped
-    expose:
-      - "80"
+    ports:
+      - "3001:80"
     environment:
       - NODE_ENV=production
     networks:

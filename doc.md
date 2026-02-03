@@ -9,9 +9,9 @@ Uma Single Page Application (SPA) focada em utilitários para desenvolvedores. O
 * **Core:** React 18+
 * **Linguagem:** TypeScript
 * **Build Tool:** Vite
-* **UI Framework:** Material UI (MUI) v5+
+* **UI Framework:** Tailwind CSS + shadcn/ui (Radix UI primitives)
 * **Roteamento:** React Router DOM (v6)
-* **Ícones:** Material Icons
+* **Ícones:** Lucide React
 * **Gerenciamento de Estado:** React Context API (para tema e configurações globais) e Local State (para as ferramentas).
 
 ### 3. Estrutura de Navegação (Layout)
@@ -128,7 +128,9 @@ src/
 ├── hooks/
 │   └── useClipboard.ts
 ├── theme/
-│   └── theme.ts (MUI Customization)
+│   └── ThemeProvider.tsx (dark/light mode)
+├── lib/
+│   └── utils.ts (cn helper)
 ├── App.tsx
 └── main.tsx
 

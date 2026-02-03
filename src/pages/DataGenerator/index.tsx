@@ -1,61 +1,57 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
-  Box,
-  Grid,
-  Button,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  Typography,
-  Stack,
-} from '@mui/material';
-import BadgeIcon from '@mui/icons-material/Badge';
-import BusinessIcon from '@mui/icons-material/Business';
-import PhoneIcon from '@mui/icons-material/Phone';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import PersonIcon from '@mui/icons-material/Person';
-import EmailIcon from '@mui/icons-material/Email';
-import LockIcon from '@mui/icons-material/Lock';
-import { PageTitle } from '../../components/Common/PageTitle';
-import { GeneratorCard } from './GeneratorCard';
-import { generateCPF } from '../../utils/generators/cpfGenerator';
-import { generateCNPJ } from '../../utils/generators/cnpjGenerator';
-import { generatePhone } from '../../utils/generators/phoneGenerator';
-import type { PhoneType } from '../../utils/generators/phoneGenerator';
-import { generateCEP } from '../../utils/generators/cepGenerator';
-import { generateName } from '../../utils/generators/nameGenerator';
-import { generateEmail } from '../../utils/generators/emailGenerator';
-import { generatePassword } from '../../utils/generators/passwordGenerator';
+  BadgeCheck,
+  Building2,
+  Phone,
+  MapPin,
+  User,
+  Mail,
+  Lock,
+} from 'lucide-react'
+import { PageTitle } from '@/components/Common/PageTitle'
+import { GeneratorCard } from './GeneratorCard'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import { generateCPF } from '@/utils/generators/cpfGenerator'
+import { generateCNPJ } from '@/utils/generators/cnpjGenerator'
+import { generatePhone } from '@/utils/generators/phoneGenerator'
+import type { PhoneType } from '@/utils/generators/phoneGenerator'
+import { generateCEP } from '@/utils/generators/cepGenerator'
+import { generateName } from '@/utils/generators/nameGenerator'
+import { generateEmail } from '@/utils/generators/emailGenerator'
+import { generatePassword } from '@/utils/generators/passwordGenerator'
 
 export function DataGenerator() {
-  const [cpf, setCpf] = useState('');
-  const [cpfFormatted, setCpfFormatted] = useState(true);
+  const [cpf, setCpf] = useState('')
+  const [cpfFormatted, setCpfFormatted] = useState(true)
 
-  const [cnpj, setCnpj] = useState('');
-  const [cnpjFormatted, setCnpjFormatted] = useState(true);
+  const [cnpj, setCnpj] = useState('')
+  const [cnpjFormatted, setCnpjFormatted] = useState(true)
 
-  const [phone, setPhone] = useState('');
-  const [phoneType, setPhoneType] = useState<PhoneType>('mobile');
-  const [phoneWithDDD, setPhoneWithDDD] = useState(true);
-  const [phoneFormatted, setPhoneFormatted] = useState(true);
+  const [phone, setPhone] = useState('')
+  const [phoneType, setPhoneType] = useState<PhoneType>('mobile')
+  const [phoneWithDDD, setPhoneWithDDD] = useState(true)
+  const [phoneFormatted, setPhoneFormatted] = useState(true)
 
-  const [cep, setCep] = useState('');
-  const [cepFormatted, setCepFormatted] = useState(true);
+  const [cep, setCep] = useState('')
+  const [cepFormatted, setCepFormatted] = useState(true)
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
 
-  const [password, setPassword] = useState('');
-  const [passwordLength, setPasswordLength] = useState(12);
+  const [password, setPassword] = useState('')
+  const [passwordLength, setPasswordLength] = useState(12)
   const [passwordOptions, setPasswordOptions] = useState({
     uppercase: true,
     lowercase: true,
     numbers: true,
     special: true,
-  });
+  })
 
-  const handleGenerateCpf = () => setCpf(generateCPF(cpfFormatted));
-  const handleGenerateCnpj = () => setCnpj(generateCNPJ(cnpjFormatted));
+  const handleGenerateCpf = () => setCpf(generateCPF(cpfFormatted))
+  const handleGenerateCnpj = () => setCnpj(generateCNPJ(cnpjFormatted))
   const handleGeneratePhone = () =>
     setPhone(
       generatePhone({
@@ -63,243 +59,259 @@ export function DataGenerator() {
         withDDD: phoneWithDDD,
         formatted: phoneFormatted,
       })
-    );
-  const handleGenerateCep = () => setCep(generateCEP(cepFormatted));
+    )
+  const handleGenerateCep = () => setCep(generateCEP(cepFormatted))
   const handleGenerateName = () => {
-    const newName = generateName();
-    setName(newName);
-    setEmail(generateEmail(newName));
-  };
-  const handleGenerateEmail = () => setEmail(generateEmail());
+    const newName = generateName()
+    setName(newName)
+    setEmail(generateEmail(newName))
+  }
+  const handleGenerateEmail = () => setEmail(generateEmail())
   const handleGeneratePassword = () =>
-    setPassword(generatePassword({ length: passwordLength, ...passwordOptions }));
+    setPassword(
+      generatePassword({ length: passwordLength, ...passwordOptions })
+    )
 
   const handleGenerateAll = () => {
-    handleGenerateCpf();
-    handleGenerateCnpj();
-    handleGeneratePhone();
-    handleGenerateCep();
-    handleGenerateName();
-    handleGeneratePassword();
-  };
+    handleGenerateCpf()
+    handleGenerateCnpj()
+    handleGeneratePhone()
+    handleGenerateCep()
+    handleGenerateName()
+    handleGeneratePassword()
+  }
+
+  const checkboxLabel = (id: string, label: string) => (
+    <Label
+      htmlFor={id}
+      className="cursor-pointer text-sm font-normal text-muted-foreground"
+    >
+      {label}
+    </Label>
+  )
 
   return (
-    <Box>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-        <PageTitle>Data Generator</PageTitle>
-        <Button variant="contained" size="large" onClick={handleGenerateAll}>
+    <div>
+      <div className="flex justify-between items-start">
+
+        <PageTitle description="Generate CPF, CNPJ, phone, CEP, names, emails, and passwords.">Data Generator</PageTitle>
+        <Button size="lg" onClick={handleGenerateAll} className="shrink-0">
           Generate All
         </Button>
-      </Stack>
+      </div>
 
-      <Grid container spacing={3}>
+      <div className="grid gap-6 sm:grid-cols-2">
         {/* CPF */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Stack spacing={1}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>CPF</Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={cpfFormatted}
-                    onChange={(e) => setCpfFormatted(e.target.checked)}
-                  />
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="flex-1 text-sm font-semibold">
+              CPF
+            </span>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="cpf-format"
+                checked={cpfFormatted}
+                onCheckedChange={(checked) =>
+                  setCpfFormatted(checked === true)
                 }
-                label="Formatted"
               />
-            </Box>
-            <GeneratorCard title="" value={cpf} onGenerate={handleGenerateCpf} icon={<BadgeIcon />} />
-          </Stack>
-        </Grid>
+              {checkboxLabel('cpf-format', 'Formatted')}
+            </div>
+          </div>
+          <GeneratorCard
+            title=""
+            value={cpf}
+            onGenerate={handleGenerateCpf}
+            icon={<BadgeCheck />}
+          />
+        </div>
 
         {/* CNPJ */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Stack spacing={1}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>CNPJ</Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={cnpjFormatted}
-                    onChange={(e) => setCnpjFormatted(e.target.checked)}
-                  />
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="flex-1 text-sm font-semibold">
+              CNPJ
+            </span>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="cnpj-format"
+                checked={cnpjFormatted}
+                onCheckedChange={(checked) =>
+                  setCnpjFormatted(checked === true)
                 }
-                label="Formatted"
               />
-            </Box>
-            <GeneratorCard
-              title=""
-              value={cnpj}
-              onGenerate={handleGenerateCnpj}
-              icon={<BusinessIcon />}
-            />
-          </Stack>
-        </Grid>
+              {checkboxLabel('cnpj-format', 'Formatted')}
+            </div>
+          </div>
+          <GeneratorCard
+            title=""
+            value={cnpj}
+            onGenerate={handleGenerateCnpj}
+            icon={<Building2 />}
+          />
+        </div>
 
         {/* Phone */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Stack spacing={1}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-              <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>Phone</Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={phoneType === 'mobile'}
-                    onChange={(e) => setPhoneType(e.target.checked ? 'mobile' : 'landline')}
-                  />
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex-1 text-sm font-semibold">
+              Phone
+            </span>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="phone-mobile"
+                checked={phoneType === 'mobile'}
+                onCheckedChange={(checked) =>
+                  setPhoneType(checked ? 'mobile' : 'landline')
                 }
-                label="Mobile"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={phoneWithDDD}
-                    onChange={(e) => setPhoneWithDDD(e.target.checked)}
-                  />
+              {checkboxLabel('phone-mobile', 'Mobile')}
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="phone-ddd"
+                checked={phoneWithDDD}
+                onCheckedChange={(checked) =>
+                  setPhoneWithDDD(checked === true)
                 }
-                label="DDD"
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={phoneFormatted}
-                    onChange={(e) => setPhoneFormatted(e.target.checked)}
-                  />
+              {checkboxLabel('phone-ddd', 'DDD')}
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="phone-format"
+                checked={phoneFormatted}
+                onCheckedChange={(checked) =>
+                  setPhoneFormatted(checked === true)
                 }
-                label="Format"
               />
-            </Box>
-            <GeneratorCard
-              title=""
-              value={phone}
-              onGenerate={handleGeneratePhone}
-              icon={<PhoneIcon />}
-            />
-          </Stack>
-        </Grid>
+              {checkboxLabel('phone-format', 'Format')}
+            </div>
+          </div>
+          <GeneratorCard
+            title=""
+            value={phone}
+            onGenerate={handleGeneratePhone}
+            icon={<Phone />}
+          />
+        </div>
 
         {/* CEP */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Stack spacing={1}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>CEP</Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={cepFormatted}
-                    onChange={(e) => setCepFormatted(e.target.checked)}
-                  />
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="flex-1 text-sm font-semibold">
+              CEP
+            </span>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="cep-format"
+                checked={cepFormatted}
+                onCheckedChange={(checked) =>
+                  setCepFormatted(checked === true)
                 }
-                label="Formatted"
               />
-            </Box>
-            <GeneratorCard
-              title=""
-              value={cep}
-              onGenerate={handleGenerateCep}
-              icon={<LocationOnIcon />}
-            />
-          </Stack>
-        </Grid>
+              {checkboxLabel('cep-format', 'Formatted')}
+            </div>
+          </div>
+          <GeneratorCard
+            title=""
+            value={cep}
+            onGenerate={handleGenerateCep}
+            icon={<MapPin />}
+          />
+        </div>
 
         {/* Name */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <GeneratorCard
-            title="Name"
-            value={name}
-            onGenerate={handleGenerateName}
-            icon={<PersonIcon />}
-          />
-        </Grid>
+        <GeneratorCard
+          title="Name"
+          value={name}
+          onGenerate={handleGenerateName}
+          icon={<User />}
+        />
 
         {/* Email */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <GeneratorCard
-            title="Email"
-            value={email}
-            onGenerate={handleGenerateEmail}
-            icon={<EmailIcon />}
-          />
-        </Grid>
+        <GeneratorCard
+          title="Email"
+          value={email}
+          onGenerate={handleGenerateEmail}
+          icon={<Mail />}
+        />
 
         {/* Password */}
-        <Grid size={{ xs: 12 }}>
-          <Stack spacing={1}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-              <Typography variant="subtitle2" sx={{ mr: 2 }}>Password</Typography>
-              <TextField
-                label="Length"
-                type="number"
-                value={passwordLength}
-                onChange={(e) => setPasswordLength(Number(e.target.value))}
-                size="small"
-                sx={{ width: 90 }}
-                inputProps={{ min: 4, max: 64 }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={passwordOptions.uppercase}
-                    onChange={(e) =>
-                      setPasswordOptions({ ...passwordOptions, uppercase: e.target.checked })
-                    }
-                  />
-                }
-                label="A-Z"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={passwordOptions.lowercase}
-                    onChange={(e) =>
-                      setPasswordOptions({ ...passwordOptions, lowercase: e.target.checked })
-                    }
-                  />
-                }
-                label="a-z"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={passwordOptions.numbers}
-                    onChange={(e) =>
-                      setPasswordOptions({ ...passwordOptions, numbers: e.target.checked })
-                    }
-                  />
-                }
-                label="0-9"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={passwordOptions.special}
-                    onChange={(e) =>
-                      setPasswordOptions({ ...passwordOptions, special: e.target.checked })
-                    }
-                  />
-                }
-                label="!@#$"
-              />
-            </Box>
-            <GeneratorCard
-              title=""
-              value={password}
-              onGenerate={handleGeneratePassword}
-              icon={<LockIcon />}
+        <div className="space-y-2 sm:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-2 text-sm font-medium text-muted-foreground">
+              Password
+            </span>
+            <Input
+              type="number"
+              min={4}
+              max={64}
+              value={passwordLength}
+              onChange={(e) => setPasswordLength(Number(e.target.value))}
+              className="h-8 w-20 font-mono"
             />
-          </Stack>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="pw-upper"
+                checked={passwordOptions.uppercase}
+                onCheckedChange={(checked) =>
+                  setPasswordOptions({
+                    ...passwordOptions,
+                    uppercase: checked === true,
+                  })
+                }
+              />
+              {checkboxLabel('pw-upper', 'A-Z')}
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="pw-lower"
+                checked={passwordOptions.lowercase}
+                onCheckedChange={(checked) =>
+                  setPasswordOptions({
+                    ...passwordOptions,
+                    lowercase: checked === true,
+                  })
+                }
+              />
+              {checkboxLabel('pw-lower', 'a-z')}
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="pw-num"
+                checked={passwordOptions.numbers}
+                onCheckedChange={(checked) =>
+                  setPasswordOptions({
+                    ...passwordOptions,
+                    numbers: checked === true,
+                  })
+                }
+              />
+              {checkboxLabel('pw-num', '0-9')}
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="pw-special"
+                checked={passwordOptions.special}
+                onCheckedChange={(checked) =>
+                  setPasswordOptions({
+                    ...passwordOptions,
+                    special: checked === true,
+                  })
+                }
+              />
+              {checkboxLabel('pw-special', '!@#$')}
+            </div>
+          </div>
+          <GeneratorCard
+            title=""
+            value={password}
+            onGenerate={handleGeneratePassword}
+            icon={<Lock />}
+          />
+        </div>
+      </div>
+    </div>
+  )
 }

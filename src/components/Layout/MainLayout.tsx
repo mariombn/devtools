@@ -15,10 +15,6 @@ export function MainLayout({ children, title }: MainLayoutProps) {
     setMobileOpen(!mobileOpen)
   }
 
-  const handleDesktopDrawerToggle = () => {
-    setDesktopOpen(!desktopOpen);
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} />

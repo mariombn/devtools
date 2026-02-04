@@ -120,3 +120,157 @@ body {
 .animate-icon-blur {
   animation: icon-blur-in 0.2s ease-out forwards;
 }
+
+/* Markdown Preview Styles */
+.markdown-preview {
+  color: var(--foreground);
+  line-height: 1.7;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-preview h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3em;
+}
+
+.markdown-preview h3 {
+  font-size: 1.25em;
+}
+
+.markdown-preview h4 {
+  font-size: 1.1em;
+}
+
+.markdown-preview h5,
+.markdown-preview h6 {
+  font-size: 1em;
+}
+
+.markdown-preview p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.markdown-preview a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.markdown-preview a:hover {
+  text-decoration: underline;
+}
+
+.markdown-preview strong {
+  font-weight: 600;
+}
+
+.markdown-preview em {
+  font-style: italic;
+}
+
+.markdown-preview code {
+  background-color: var(--muted);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  background-color: var(--muted);
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1em 0;
+}
+
+.markdown-preview pre code {
+  background-color: transparent;
+  padding: 0;
+  font-size: 0.875em;
+  display: block;
+}
+
+.markdown-preview ul {
+  list-style-type: disc;
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.markdown-preview ol {
+  list-style-type: decimal;
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.markdown-preview ul ul {
+  list-style-type: circle;
+}
+
+.markdown-preview ul ul ul {
+  list-style-type: square;
+}
+
+.markdown-preview li {
+  margin: 0.25em 0;
+  display: list-item;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid var(--border);
+  padding-left: 1em;
+  margin: 1em 0;
+  color: var(--muted-foreground);
+}
+
+.markdown-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.markdown-preview table th,
+.markdown-preview table td {
+  border: 1px solid var(--border);
+  padding: 0.5em 1em;
+  text-align: left;
+}
+
+.markdown-preview table th {
+  background-color: var(--muted);
+  font-weight: 600;
+}
+
+.markdown-preview hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-preview del {
+  text-decoration: line-through;
+  color: var(--muted-foreground);
+}

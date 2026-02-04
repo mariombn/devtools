@@ -16,6 +16,8 @@ import { GitCompareIcon } from '@/components/icons/GitCompareIcon'
 import type { GitCompareIconHandle } from '@/components/icons/GitCompareIcon'
 import { ShieldCheckIcon } from '@/components/icons/ShieldCheckIcon'
 import type { ShieldCheckIconHandle } from '@/components/icons/ShieldCheckIcon'
+import { MarkdownIcon } from '@/components/icons/MarkdownIcon'
+import type { MarkdownIconHandle } from '@/components/icons/MarkdownIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -25,6 +27,7 @@ const menuItems = [
   { text: 'Data Generator', path: '/generator', animatedIcon: 'users' as const },
   { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
   { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
+  { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
 ] as const
 
 interface SidebarProps {
@@ -40,6 +43,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const usersIconRef = useRef<UsersIconHandle>(null)
   const gitCompareIconRef = useRef<GitCompareIconHandle>(null)
   const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
+  const markdownIconRef = useRef<MarkdownIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -78,12 +82,14 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
             if (animatedType === 'users') usersIconRef.current?.startAnimation()
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.startAnimation()
             if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
+            if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
           }
           const handleMouseLeave = () => {
             if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
             if (animatedType === 'users') usersIconRef.current?.stopAnimation()
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.stopAnimation()
             if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
+            if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
           }
 
           const buttonContent = (
@@ -125,6 +131,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               ) : animatedType === 'shieldCheck' ? (
                 <ShieldCheckIcon
                   ref={shieldCheckIconRef}
+                  size={18}
+                  className="shrink-0 opacity-80"
+                />
+              ) : animatedType === 'markdown' ? (
+                <MarkdownIcon
+                  ref={markdownIconRef}
                   size={18}
                   className="shrink-0 opacity-80"
                 />

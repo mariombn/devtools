@@ -4,6 +4,7 @@ import { JsonToolkit } from '@/pages/JsonToolkit'
 import { DataGenerator } from '@/pages/DataGenerator'
 import { TextComparator } from '@/pages/TextComparator'
 import { BcryptGenerator } from '@/pages/BcryptGenerator'
+import { MarkdownPreview } from '@/pages/MarkdownPreview'
 
 function App() {
   return (
@@ -39,6 +40,14 @@ function App() {
           element={
             <MainLayout title="Bcrypt Generator">
               <BcryptGenerator />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/markdown"
+          element={
+            <MainLayout title="Markdown Preview" fullWidth>
+              <MarkdownPreview />
             </MainLayout>
           }
         />

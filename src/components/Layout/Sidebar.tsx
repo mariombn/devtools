@@ -8,6 +8,8 @@ import { UsersIcon } from '@/components/icons/UsersIcon'
 import type { UsersIconHandle } from '@/components/icons/UsersIcon'
 import { GitCompareIcon } from '@/components/icons/GitCompareIcon'
 import type { GitCompareIconHandle } from '@/components/icons/GitCompareIcon'
+import { ShieldCheckIcon } from '@/components/icons/ShieldCheckIcon'
+import type { ShieldCheckIconHandle } from '@/components/icons/ShieldCheckIcon'
 
 const drawerWidth = 260
 
@@ -15,6 +17,7 @@ const menuItems = [
   { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },
   { text: 'Data Generator', path: '/generator', animatedIcon: 'users' as const },
   { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
+  { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
 ] as const
 
 interface SidebarProps {
@@ -28,6 +31,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const chevronsIconRef = useRef<ChevronsLeftRightIconHandle>(null)
   const usersIconRef = useRef<UsersIconHandle>(null)
   const gitCompareIconRef = useRef<GitCompareIconHandle>(null)
+  const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -59,11 +63,13 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
             if (animatedType === 'chevrons') chevronsIconRef.current?.startAnimation()
             if (animatedType === 'users') usersIconRef.current?.startAnimation()
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.startAnimation()
+            if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
           }
           const handleMouseLeave = () => {
             if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
             if (animatedType === 'users') usersIconRef.current?.stopAnimation()
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.stopAnimation()
+            if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
           }
 
           return (
@@ -96,6 +102,12 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               ) : animatedType === 'gitCompare' ? (
                 <GitCompareIcon
                   ref={gitCompareIconRef}
+                  size={18}
+                  className="shrink-0 opacity-80"
+                />
+              ) : animatedType === 'shieldCheck' ? (
+                <ShieldCheckIcon
+                  ref={shieldCheckIconRef}
                   size={18}
                   className="shrink-0 opacity-80"
                 />

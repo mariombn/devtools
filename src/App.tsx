@@ -3,6 +3,7 @@ import { MainLayout } from '@/components/Layout/MainLayout'
 import { JsonToolkit } from '@/pages/JsonToolkit'
 import { DataGenerator } from '@/pages/DataGenerator'
 import { TextComparator } from '@/pages/TextComparator'
+import { BcryptGenerator } from '@/pages/BcryptGenerator'
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
           element={
             <MainLayout title="Text Comparator">
               <TextComparator />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/bcrypt"
+          element={
+            <MainLayout title="Bcrypt Generator">
+              <BcryptGenerator />
             </MainLayout>
           }
         />

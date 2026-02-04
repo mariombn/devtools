@@ -1,6 +1,7 @@
 import { RefreshCw } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { CopyButton } from '@/components/Common/CopyButton'
 
@@ -9,6 +10,8 @@ interface GeneratorCardProps {
   value: string
   onGenerate: () => void
   icon?: React.ReactNode
+  options?: React.ReactNode
+  isTextarea?: boolean
 }
 
 export function GeneratorCard({
@@ -16,6 +19,8 @@ export function GeneratorCard({
   value,
   onGenerate,
   icon,
+  options,
+  isTextarea = false,
 }: GeneratorCardProps) {
   return (
     <Card>
@@ -27,6 +32,9 @@ export function GeneratorCard({
             </span>
           )}
           <span className="min-w-0 flex-1 truncate font-medium text-foreground">{title}</span>
+          {options && (
+            <div className="flex items-center gap-2">{options}</div>
+          )}
           <Button
             type="button"
             variant="ghost"
@@ -39,12 +47,20 @@ export function GeneratorCard({
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Input
-            readOnly
-            value={value}
-            className="font-mono text-sm"
-          />
+        <div className="flex items-start gap-2">
+          {isTextarea ? (
+            <Textarea
+              readOnly
+              value={value}
+              className="font-mono text-sm min-h-[120px] resize-y"
+            />
+          ) : (
+            <Input
+              readOnly
+              value={value}
+              className="font-mono text-sm"
+            />
+          )}
           <CopyButton text={value} size="icon" />
         </div>
       </CardContent>

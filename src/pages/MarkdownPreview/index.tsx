@@ -92,13 +92,16 @@ export function MarkdownPreview() {
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
-                    code({ inline, className, children, ...props }) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    code(props: any) {
+                      const { inline, className, children, ...rest } = props
                       const match = /language-(\w+)/.exec(className || '')
                       const language = match ? match[1] : ''
                       
                       return !inline && language ? (
                         <SyntaxHighlighter
-                          style={isDark ? (vscDarkPlus as never) : (vs as never)}
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          style={(isDark ? vscDarkPlus : vs) as any}
                           language={language}
                           PreTag="div"
                           customStyle={{
@@ -106,12 +109,12 @@ export function MarkdownPreview() {
                             padding: '1em',
                             fontSize: '0.875em',
                           }}
-                          {...props}
+                          {...rest}
                         >
                           {String(children).replace(/\n$/, '')}
                         </SyntaxHighlighter>
                       ) : (
-                        <code className={className} {...props}>
+                        <code className={className} {...rest}>
                           {children}
                         </code>
                       )

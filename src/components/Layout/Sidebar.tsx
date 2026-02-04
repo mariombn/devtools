@@ -2,6 +2,12 @@ import { useRef } from 'react'
 import { Wrench } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { ChevronsLeftRightIcon } from '@/components/icons/ChevronsLeftRightIcon'
 import type { ChevronsLeftRightIconHandle } from '@/components/icons/ChevronsLeftRightIcon'
 import { UsersIcon } from '@/components/icons/UsersIcon'
@@ -12,6 +18,7 @@ import { ShieldCheckIcon } from '@/components/icons/ShieldCheckIcon'
 import type { ShieldCheckIconHandle } from '@/components/icons/ShieldCheckIcon'
 
 const drawerWidth = 260
+const collapsedWidth = 64
 
 const menuItems = [
   { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },
@@ -23,9 +30,10 @@ const menuItems = [
 interface SidebarProps {
   mobileOpen: boolean
   onClose: () => void
+  collapsed?: boolean
 }
 
-export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const chevronsIconRef = useRef<ChevronsLeftRightIconHandle>(null)
@@ -48,13 +56,19 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   const drawerContent = (
     <div className="flex h-full flex-col">
-      <div className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-4 md:border-0">
+      <div className={cn(
+        "flex h-14 shrink-0 items-center border-b border-border md:border-0",
+        collapsed ? "justify-center px-2" : "gap-2 px-4"
+      )}>
         <div className="flex size-6 items-center justify-center rounded-lg bg-foreground text-background">
           <Wrench className="size-4" />
         </div>
-        <span className="font-semibold tracking-tight text-foreground">DevTools</span>
+        {!collapsed && (
+          <span className="font-semibold tracking-tight text-foreground">DevTools</span>
+        )}
       </div>
-      <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Main">
+      <TooltipProvider delayDuration={0}>
+        <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Main">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path
           const animatedType = 'animatedIcon' in item ? item.animatedIcon : null
@@ -72,11 +86,14 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
             if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
           }
 
-          return (
+          const buttonContent = (
             <button
               key={item.text}
               type="button"
-              className={linkClass(item.path)}
+              className={cn(
+                linkClass(item.path),
+                collapsed && "justify-center px-2"
+              )}
               onClick={() => handleNavigation(item.path)}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -112,11 +129,25 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   className="shrink-0 opacity-80"
                 />
               ) : null}
-              {item.text}
+              {!collapsed && <span>{item.text}</span>}
             </button>
           )
+
+          return collapsed ? (
+            <Tooltip key={item.text}>
+              <TooltipTrigger asChild>
+                {buttonContent}
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                {item.text}
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            buttonContent
+          )
         })}
-      </nav>
+        </nav>
+      </TooltipProvider>
     </div>
   )
 
@@ -143,8 +174,8 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       </aside>
 
       <aside
-        className="hidden w-[260px] shrink-0 flex-col border-r border-border bg-card/95 backdrop-blur md:flex"
-        style={{ width: drawerWidth }}
+        className="hidden shrink-0 flex-col border-r border-border bg-card/95 backdrop-blur transition-all duration-300 ease-in-out md:flex"
+        style={{ width: collapsed ? collapsedWidth : drawerWidth }}
       >
         {drawerContent}
       </aside>

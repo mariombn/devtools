@@ -1,73 +1,132 @@
-# React + TypeScript + Vite
+# DevTools
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A collection of free, ad-free developer tools to make your life easier. Built with modern web technologies and designed with a focus on privacy - all processing happens in your browser.
 
-Currently, two official plugins are available:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?logo=vite)](https://vitejs.dev/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+### JSON Toolkit
+- **Format & Minify**: Pretty-print or compress JSON data
+- **Validate**: Check JSON syntax and structure
+- **Sort Keys**: Organize JSON keys alphabetically
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Data Generator
+Generate realistic test data for your applications:
+- **CPF**: Brazilian tax ID with formatting options
+- **CNPJ**: Brazilian company tax ID
+- **Phone Numbers**: Mobile and landline with DDD (area code)
+- **CEP**: Brazilian postal code
+- **Names**: Random Brazilian names with Faker.js
+- **Emails**: Generate email addresses
+- **Passwords**: Customizable password generation (length, uppercase, lowercase, numbers, special chars)
+- **Lorem Ipsum**: Generate placeholder text (paragraphs, sentences, or words)
 
-## Expanding the ESLint configuration
+### Text Comparator
+- Side-by-side text comparison
+- Character-level diff highlighting
+- Line-by-line analysis
+- Visual indicators for additions, deletions, and changes
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Bcrypt Generator
+- **Hash Generation**: Create bcrypt hashes with configurable rounds (4-20)
+- **Hash Verification**: Verify if a hash matches the original text
+- **Security Info**: Built-in FAQ and best practices
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Live Demo
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Visit the live application: https://devtools.mariombn.com/
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Installation
+
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/mariombn/devtools.git
+cd devtools
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Install dependencies:
+```bash
+npm install
 ```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+4. Open your browser and visit `http://localhost:5173`
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+The optimized files will be in the `dist` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```
+devtools/
+├── src/
+│   ├── components/       # Reusable UI components
+│   │   ├── Common/       # Shared components
+│   │   ├── icons/        # Custom animated icons
+│   │   ├── Layout/       # Layout components (Sidebar, TopBar)
+│   │   └── ui/           # Base UI components (buttons, inputs, etc)
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utility functions
+│   ├── pages/            # Page components (routes)
+│   │   ├── BcryptGenerator/
+│   │   ├── DataGenerator/
+│   │   ├── JsonToolkit/
+│   │   └── TextComparator/
+│   ├── theme/            # Theme provider and configuration
+│   ├── utils/            # Utility functions
+│   │   ├── formatters/   # Data formatting utilities
+│   │   └── generators/   # Data generation utilities
+│   ├── App.tsx           # Main app component with routing
+│   └── main.tsx          # Application entry point
+├── public/               # Static assets
+└── dist/                 # Production build (generated)
+```
+
+## Contributing
+
+Contributions are welcome! This is an open-source project and we'd love your help to make it better.
+
+### How to Contribute
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Code Style
+
+- This project uses ESLint for code quality
+- Run `npm run lint` before committing
+- Follow existing code patterns and conventions
+- Write meaningful commit messages
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

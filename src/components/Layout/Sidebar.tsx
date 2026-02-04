@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Wrench } from 'lucide-react'
+import { Wrench, Github } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import {
@@ -148,6 +148,39 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
         })}
         </nav>
       </TooltipProvider>
+      <div className={cn(
+        "border-t border-border p-3",
+        collapsed ? "flex justify-center" : "flex items-center gap-2"
+      )}>
+        {collapsed ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href="https://github.com/mariombn/devtools"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                aria-label="GitHub Repository"
+              >
+                <Github className="size-4" />
+              </a>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              GitHub Repository
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <a
+            href="https://github.com/mariombn/devtools"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          >
+            <Github className="size-4" />
+            <span>GitHub Repository</span>
+          </a>
+        )}
+      </div>
     </div>
   )
 

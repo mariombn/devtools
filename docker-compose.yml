@@ -5,10 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: devtools
+    container_name: ${ENVIRONMENT:-production}-devtools
     restart: unless-stopped
     ports:
-      - 80
+      - ${PORT:-80}:80
     environment:
       - NODE_ENV=production
     networks:

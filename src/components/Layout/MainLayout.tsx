@@ -6,9 +6,10 @@ import { Sidebar } from './Sidebar'
 interface MainLayoutProps {
   children: ReactNode
   title: string
+  fullWidth?: boolean
 }
 
-export function MainLayout({ children, title }: MainLayoutProps) {
+export function MainLayout({ children, title, fullWidth = false }: MainLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const stored = localStorage.getItem('sidebar-collapsed')
@@ -38,9 +39,13 @@ export function MainLayout({ children, title }: MainLayoutProps) {
           sidebarCollapsed={sidebarCollapsed}
         />
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-5xl">
-            {children}
-          </div>
+          {fullWidth ? (
+            children
+          ) : (
+            <div className="mx-auto max-w-5xl">
+              {children}
+            </div>
+          )}
         </main>
       </div>
     </div>

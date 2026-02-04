@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="toolGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="#171717"/>
+  <path fill="url(#toolGradient)" d="M352 128c-13.3 0-24-10.7-24-24V80c0-13.3 10.7-24 24-24h56c13.3 0 24 10.7 24 24v24c0 13.3-10.7 24-24 24h-56zM376 224c-13.3 0-24-10.7-24-24v-24c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v24c0 13.3-10.7 24-24 24h-32zM104 336c-13.3 0-24-10.7-24-24v-56c0-13.3 10.7-24 24-24h24c13.3 0 24 10.7 24 24v56c0 13.3-10.7 24-24 24h-24zM128 408c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h24c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24h-24z"/>
+  <path fill="url(#toolGradient)" d="M320 176c0-8.8 7.2-16 16-16h96c8.8 0 16 7.2 16 16v96c0 8.8-7.2 16-16 16h-96c-8.8 0-16-7.2-16-16v-96zM80 288c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v48c0 8.8-7.2 16-16 16H96c-8.8 0-16-7.2-16-16v-48z"/>
+  <g transform="translate(150, 100)">
+    <path fill="#fbbf24" stroke="#f59e0b" stroke-width="8" d="M 120 60 L 160 100 L 100 160 L 20 240 C 15 245 15 253 20 258 L 42 280 C 47 285 55 285 60 280 L 140 200 L 200 140 L 240 180 L 280 140 L 180 40 L 140 80 L 120 60 Z"/>
+    <circle cx="200" cy="100" r="30" fill="#f59e0b" stroke="#d97706" stroke-width="6"/>
+  </g>
+</svg>

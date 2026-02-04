@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: devtools
+    container_name: ${ENVIRONMENT:-production}-devtools
     restart: unless-stopped
     ports:
       - ${PORT:-80}:80

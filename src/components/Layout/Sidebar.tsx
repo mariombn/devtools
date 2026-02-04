@@ -55,19 +55,19 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
     )
 
   const drawerContent = (
-    <div className="flex h-full flex-col">
-      <div className={cn(
-        "flex h-14 shrink-0 items-center border-b border-border md:border-0",
-        collapsed ? "justify-center px-2" : "gap-2 px-4"
-      )}>
-        <div className="flex size-6 items-center justify-center rounded-lg bg-foreground text-background">
-          <Wrench className="size-4" />
+    <TooltipProvider delayDuration={0}>
+      <div className="flex h-full flex-col">
+        <div className={cn(
+          "flex h-14 shrink-0 items-center border-b border-border md:border-0",
+          collapsed ? "justify-center px-2" : "gap-2 px-4"
+        )}>
+          <div className="flex size-6 items-center justify-center rounded-lg bg-foreground text-background">
+            <Wrench className="size-4" />
+          </div>
+          {!collapsed && (
+            <span className="font-semibold tracking-tight text-foreground">DevTools</span>
+          )}
         </div>
-        {!collapsed && (
-          <span className="font-semibold tracking-tight text-foreground">DevTools</span>
-        )}
-      </div>
-      <TooltipProvider delayDuration={0}>
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Main">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path
@@ -147,11 +147,10 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
           )
         })}
         </nav>
-      </TooltipProvider>
-      <div className={cn(
-        "border-t border-border p-3",
-        collapsed ? "flex justify-center" : "flex items-center gap-2"
-      )}>
+        <div className={cn(
+          "border-t border-border p-3",
+          collapsed ? "flex justify-center" : "flex items-center gap-2"
+        )}>
         {collapsed ? (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -181,7 +180,8 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
           </a>
         )}
       </div>
-    </div>
+      </div>
+    </TooltipProvider>
   )
 
   return (

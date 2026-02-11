@@ -18,6 +18,8 @@ import { ShieldCheckIcon } from '@/components/icons/ShieldCheckIcon'
 import type { ShieldCheckIconHandle } from '@/components/icons/ShieldCheckIcon'
 import { MarkdownIcon } from '@/components/icons/MarkdownIcon'
 import type { MarkdownIconHandle } from '@/components/icons/MarkdownIcon'
+import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
+import type { DatabaseIconHandle } from '@/components/icons/DatabaseIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -28,6 +30,7 @@ const menuItems = [
   { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
   { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
   { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
+  { text: 'SQL Tools', path: '/sql', animatedIcon: 'database' as const },
 ] as const
 
 interface SidebarProps {
@@ -44,6 +47,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const gitCompareIconRef = useRef<GitCompareIconHandle>(null)
   const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
   const markdownIconRef = useRef<MarkdownIconHandle>(null)
+  const databaseIconRef = useRef<DatabaseIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -83,6 +87,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.startAnimation()
             if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
             if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
+            if (animatedType === 'database') databaseIconRef.current?.startAnimation()
           }
           const handleMouseLeave = () => {
             if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
@@ -90,6 +95,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
             if (animatedType === 'gitCompare') gitCompareIconRef.current?.stopAnimation()
             if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
             if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
+            if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
           }
 
           const buttonContent = (
@@ -137,6 +143,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               ) : animatedType === 'markdown' ? (
                 <MarkdownIcon
                   ref={markdownIconRef}
+                  size={18}
+                  className="shrink-0 opacity-80"
+                />
+              ) : animatedType === 'database' ? (
+                <DatabaseIcon
+                  ref={databaseIconRef}
                   size={18}
                   className="shrink-0 opacity-80"
                 />

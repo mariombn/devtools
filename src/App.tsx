@@ -5,6 +5,7 @@ import { DataGenerator } from '@/pages/DataGenerator'
 import { TextComparator } from '@/pages/TextComparator'
 import { BcryptGenerator } from '@/pages/BcryptGenerator'
 import { MarkdownPreview } from '@/pages/MarkdownPreview'
+import { SqlTools } from '@/pages/SqlTools'
 
 function App() {
   return (
@@ -48,6 +49,14 @@ function App() {
           element={
             <MainLayout title="Markdown Preview" fullWidth>
               <MarkdownPreview />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/sql"
+          element={
+            <MainLayout title="SQL Tools" fullWidth>
+              <SqlTools />
             </MainLayout>
           }
         />

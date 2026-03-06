@@ -20,12 +20,15 @@ import { MarkdownIcon } from '@/components/icons/MarkdownIcon'
 import type { MarkdownIconHandle } from '@/components/icons/MarkdownIcon'
 import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 import type { DatabaseIconHandle } from '@/components/icons/DatabaseIcon'
+import { CheckSquareIcon } from '@/components/icons/CheckSquareIcon'
+import type { CheckSquareIconHandle } from '@/components/icons/CheckSquareIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
 
 const menuItems = [
   { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },
+  { text: 'Validators', path: '/validators', animatedIcon: 'checkSquare' as const },
   { text: 'Data Generator', path: '/generator', animatedIcon: 'users' as const },
   { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
   { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
@@ -43,6 +46,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const navigate = useNavigate()
   const location = useLocation()
   const chevronsIconRef = useRef<ChevronsLeftRightIconHandle>(null)
+  const checkSquareIconRef = useRef<CheckSquareIconHandle>(null)
   const usersIconRef = useRef<UsersIconHandle>(null)
   const gitCompareIconRef = useRef<GitCompareIconHandle>(null)
   const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
@@ -77,133 +81,141 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
           )}
         </div>
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Main">
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path
-          const animatedType = 'animatedIcon' in item ? item.animatedIcon : null
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path
+            const animatedType = 'animatedIcon' in item ? item.animatedIcon : null
 
-          const handleMouseEnter = () => {
-            if (animatedType === 'chevrons') chevronsIconRef.current?.startAnimation()
-            if (animatedType === 'users') usersIconRef.current?.startAnimation()
-            if (animatedType === 'gitCompare') gitCompareIconRef.current?.startAnimation()
-            if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
-            if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
-            if (animatedType === 'database') databaseIconRef.current?.startAnimation()
-          }
-          const handleMouseLeave = () => {
-            if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
-            if (animatedType === 'users') usersIconRef.current?.stopAnimation()
-            if (animatedType === 'gitCompare') gitCompareIconRef.current?.stopAnimation()
-            if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
-            if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
-            if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
-          }
+            const handleMouseEnter = () => {
+              if (animatedType === 'chevrons') chevronsIconRef.current?.startAnimation()
+              if (animatedType === 'checkSquare') checkSquareIconRef.current?.startAnimation()
+              if (animatedType === 'users') usersIconRef.current?.startAnimation()
+              if (animatedType === 'gitCompare') gitCompareIconRef.current?.startAnimation()
+              if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
+              if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
+              if (animatedType === 'database') databaseIconRef.current?.startAnimation()
+            }
+            const handleMouseLeave = () => {
+              if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
+              if (animatedType === 'checkSquare') checkSquareIconRef.current?.stopAnimation()
+              if (animatedType === 'users') usersIconRef.current?.stopAnimation()
+              if (animatedType === 'gitCompare') gitCompareIconRef.current?.stopAnimation()
+              if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
+              if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
+              if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
+            }
 
-          const buttonContent = (
-            <button
-              key={item.text}
-              type="button"
-              className={cn(
-                linkClass(item.path),
-                collapsed && "justify-center px-2"
-              )}
-              onClick={() => handleNavigation(item.path)}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              {isActive && (
-                <span
-                  className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-foreground"
-                  aria-hidden
-                />
-              )}
-              {animatedType === 'chevrons' ? (
-                <ChevronsLeftRightIcon
-                  ref={chevronsIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : animatedType === 'users' ? (
-                <UsersIcon
-                  ref={usersIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : animatedType === 'gitCompare' ? (
-                <GitCompareIcon
-                  ref={gitCompareIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : animatedType === 'shieldCheck' ? (
-                <ShieldCheckIcon
-                  ref={shieldCheckIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : animatedType === 'markdown' ? (
-                <MarkdownIcon
-                  ref={markdownIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : animatedType === 'database' ? (
-                <DatabaseIcon
-                  ref={databaseIconRef}
-                  size={18}
-                  className="shrink-0 opacity-80"
-                />
-              ) : null}
-              {!collapsed && <span>{item.text}</span>}
-            </button>
-          )
+            const buttonContent = (
+              <button
+                key={item.text}
+                type="button"
+                className={cn(
+                  linkClass(item.path),
+                  collapsed && "justify-center px-2"
+                )}
+                onClick={() => handleNavigation(item.path)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                {isActive && (
+                  <span
+                    className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-foreground"
+                    aria-hidden
+                  />
+                )}
+                {animatedType === 'chevrons' ? (
+                  <ChevronsLeftRightIcon
+                    ref={chevronsIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'checkSquare' ? (
+                  <CheckSquareIcon
+                    ref={checkSquareIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'users' ? (
+                  <UsersIcon
+                    ref={usersIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'gitCompare' ? (
+                  <GitCompareIcon
+                    ref={gitCompareIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'shieldCheck' ? (
+                  <ShieldCheckIcon
+                    ref={shieldCheckIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'markdown' ? (
+                  <MarkdownIcon
+                    ref={markdownIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'database' ? (
+                  <DatabaseIcon
+                    ref={databaseIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : null}
+                {!collapsed && <span>{item.text}</span>}
+              </button>
+            )
 
-          return collapsed ? (
-            <Tooltip key={item.text}>
-              <TooltipTrigger asChild>
-                {buttonContent}
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                {item.text}
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            buttonContent
-          )
-        })}
+            return collapsed ? (
+              <Tooltip key={item.text}>
+                <TooltipTrigger asChild>
+                  {buttonContent}
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  {item.text}
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              buttonContent
+            )
+          })}
         </nav>
         <div className={cn(
           "border-t border-border p-3",
           collapsed ? "flex justify-center" : "flex items-center gap-2"
         )}>
-        {collapsed ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <a
-                href="https://github.com/mariombn/devtools"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                aria-label="GitHub Repository"
-              >
-                <Github className="size-4" />
-              </a>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              GitHub Repository
-            </TooltipContent>
-          </Tooltip>
-        ) : (
-          <a
-            href="https://github.com/mariombn/devtools"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-          >
-            <Github className="size-4" />
-            <span>GitHub Repository</span>
-          </a>
-        )}
-      </div>
+          {collapsed ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a
+                  href="https://github.com/mariombn/devtools"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  aria-label="GitHub Repository"
+                >
+                  <Github className="size-4" />
+                </a>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                GitHub Repository
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <a
+              href="https://github.com/mariombn/devtools"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+            >
+              <Github className="size-4" />
+              <span>GitHub Repository</span>
+            </a>
+          )}
+        </div>
       </div>
     </TooltipProvider>
   )

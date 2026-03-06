@@ -6,6 +6,7 @@ import { TextComparator } from '@/pages/TextComparator'
 import { BcryptGenerator } from '@/pages/BcryptGenerator'
 import { MarkdownPreview } from '@/pages/MarkdownPreview'
 import { SqlTools } from '@/pages/SqlTools'
+import { Validators } from '@/pages/Validators'
 
 function App() {
   return (
@@ -17,6 +18,14 @@ function App() {
           element={
             <MainLayout title="JSON Toolkit">
               <JsonToolkit />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/validators"
+          element={
+            <MainLayout title="Validators">
+              <Validators />
             </MainLayout>
           }
         />

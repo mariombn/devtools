@@ -45,6 +45,7 @@ export default defineConfig({
 			},
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+				maximumFileSizeToCacheInBytes: 5000000,
 				runtimeCaching: [
 					{
 						urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -64,11 +65,11 @@ export default defineConfig({
 			}
 		})
 	],
-      resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, './src'),
+		},
+	},
 	preview: {
 		port: 3000,
 		host: true,    // This enables listening on all network interfaces

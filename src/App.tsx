@@ -7,6 +7,7 @@ import { BcryptGenerator } from '@/pages/BcryptGenerator'
 import { MarkdownPreview } from '@/pages/MarkdownPreview'
 import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
+import { DatesToolkit } from '@/pages/DatesToolkit'
 
 function App() {
   return (
@@ -66,6 +67,14 @@ function App() {
           element={
             <MainLayout title="SQL Tools" fullWidth>
               <SqlTools />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/dates"
+          element={
+            <MainLayout title="Date & Time Tools">
+              <DatesToolkit />
             </MainLayout>
           }
         />

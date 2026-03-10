@@ -22,6 +22,8 @@ import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 import type { DatabaseIconHandle } from '@/components/icons/DatabaseIcon'
 import { CheckSquareIcon } from '@/components/icons/CheckSquareIcon'
 import type { CheckSquareIconHandle } from '@/components/icons/CheckSquareIcon'
+import { CalendarIcon } from '@/components/icons/CalendarIcon'
+import type { CalendarIconHandle } from '@/components/icons/CalendarIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -34,6 +36,7 @@ const menuItems = [
   { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
   { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
   { text: 'SQL Tools', path: '/sql', animatedIcon: 'database' as const },
+  { text: 'Date & Time Tools', path: '/dates', animatedIcon: 'calendar' as const },
 ] as const
 
 interface SidebarProps {
@@ -52,6 +55,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
   const markdownIconRef = useRef<MarkdownIconHandle>(null)
   const databaseIconRef = useRef<DatabaseIconHandle>(null)
+  const calendarIconRef = useRef<CalendarIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -93,6 +97,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.startAnimation()
               if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
               if (animatedType === 'database') databaseIconRef.current?.startAnimation()
+              if (animatedType === 'calendar') calendarIconRef.current?.startAnimation()
             }
             const handleMouseLeave = () => {
               if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
@@ -102,6 +107,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'shieldCheck') shieldCheckIconRef.current?.stopAnimation()
               if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
               if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
+              if (animatedType === 'calendar') calendarIconRef.current?.stopAnimation()
             }
 
             const buttonContent = (
@@ -161,6 +167,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                 ) : animatedType === 'database' ? (
                   <DatabaseIcon
                     ref={databaseIconRef}
+                    size={18}
+                    className="shrink-0 opacity-80"
+                  />
+                ) : animatedType === 'calendar' ? (
+                  <CalendarIcon
+                    ref={calendarIconRef}
                     size={18}
                     className="shrink-0 opacity-80"
                   />

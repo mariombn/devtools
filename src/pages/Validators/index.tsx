@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { CheckCircle, XCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { PageTitle } from '@/components/Common/PageTitle'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 
 // Helper: CPF Validation
 const validateCPF = (cpf: string): boolean => {
@@ -104,24 +106,20 @@ export function Validators() {
             : 'border-red-500 focus-visible:ring-red-500'
     }
 
-    const getValidationMessage = (value: string, isValid: boolean) => {
+    const ValidationIcon = ({ value, isValid }: { value: string; isValid: boolean }) => {
         if (!value) return null
         return isValid ? (
-            <span className="text-sm text-green-600 dark:text-green-400">Valid</span>
+            <CheckCircle className="h-4 w-4 text-success" />
         ) : (
-            <span className="text-sm text-red-600 dark:text-red-400">Invalid</span>
+            <XCircle className="h-4 w-4 text-destructive" />
         )
     }
 
     return (
-        <div className="flex flex-col gap-6">
-            {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-foreground">Data Validators</h1>
-                <p className="mt-1 text-sm text-muted-foreground">
-                    Quickly validate common formats and documents like CPF, CNPJ, Email, and Credit Cards.
-                </p>
-            </div>
+        <div>
+            <PageTitle description="Quickly validate common formats and documents like CPF, CNPJ, Email, and Credit Cards.">
+                Data Validators
+            </PageTitle>
 
             <div className="grid gap-6 md:grid-cols-2">
                 {/* CPF Validator */}
@@ -134,18 +132,19 @@ export function Validators() {
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="cpf-input">CPF Document</Label>
-                                {getValidationMessage(cpf, validateCPF(cpf))}
+                            <div className="relative">
+                                <Input
+                                    id="cpf-input"
+                                    type="text"
+                                    placeholder="000.000.000-00 or numbers only"
+                                    value={cpf}
+                                    onChange={(e) => setCpf(e.target.value)}
+                                    className={cn('pr-9', getValidationStyle(cpf, validateCPF(cpf)))}
+                                />
+                                <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                    <ValidationIcon value={cpf} isValid={validateCPF(cpf)} />
+                                </span>
                             </div>
-                            <Input
-                                id="cpf-input"
-                                type="text"
-                                placeholder="000.000.000-00 or numbers only"
-                                value={cpf}
-                                onChange={(e) => setCpf(e.target.value)}
-                                className={getValidationStyle(cpf, validateCPF(cpf))}
-                            />
                         </div>
                     </div>
                 </Card>
@@ -160,18 +159,19 @@ export function Validators() {
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="cnpj-input">CNPJ Document</Label>
-                                {getValidationMessage(cnpj, validateCNPJ(cnpj))}
+                            <div className="relative">
+                                <Input
+                                    id="cnpj-input"
+                                    type="text"
+                                    placeholder="00.000.000/0000-00 or numbers only"
+                                    value={cnpj}
+                                    onChange={(e) => setCnpj(e.target.value)}
+                                    className={cn('pr-9', getValidationStyle(cnpj, validateCNPJ(cnpj)))}
+                                />
+                                <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                    <ValidationIcon value={cnpj} isValid={validateCNPJ(cnpj)} />
+                                </span>
                             </div>
-                            <Input
-                                id="cnpj-input"
-                                type="text"
-                                placeholder="00.000.000/0000-00 or numbers only"
-                                value={cnpj}
-                                onChange={(e) => setCnpj(e.target.value)}
-                                className={getValidationStyle(cnpj, validateCNPJ(cnpj))}
-                            />
                         </div>
                     </div>
                 </Card>
@@ -186,18 +186,19 @@ export function Validators() {
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="email-input">Email Address</Label>
-                                {getValidationMessage(email, validateEmail(email))}
+                            <div className="relative">
+                                <Input
+                                    id="email-input"
+                                    type="email"
+                                    placeholder="example@domain.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={cn('pr-9', getValidationStyle(email, validateEmail(email)))}
+                                />
+                                <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                    <ValidationIcon value={email} isValid={validateEmail(email)} />
+                                </span>
                             </div>
-                            <Input
-                                id="email-input"
-                                type="email"
-                                placeholder="example@domain.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={getValidationStyle(email, validateEmail(email))}
-                            />
                         </div>
                     </div>
                 </Card>
@@ -212,18 +213,19 @@ export function Validators() {
                             </p>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="cc-input">Credit Card Number</Label>
-                                {getValidationMessage(creditCard, validateCreditCard(creditCard))}
+                            <div className="relative">
+                                <Input
+                                    id="cc-input"
+                                    type="text"
+                                    placeholder="0000 0000 0000 0000"
+                                    value={creditCard}
+                                    onChange={(e) => setCreditCard(e.target.value)}
+                                    className={cn('pr-9', getValidationStyle(creditCard, validateCreditCard(creditCard)))}
+                                />
+                                <span className="absolute right-2.5 top-1/2 -translate-y-1/2">
+                                    <ValidationIcon value={creditCard} isValid={validateCreditCard(creditCard)} />
+                                </span>
                             </div>
-                            <Input
-                                id="cc-input"
-                                type="text"
-                                placeholder="0000 0000 0000 0000"
-                                value={creditCard}
-                                onChange={(e) => setCreditCard(e.target.value)}
-                                className={getValidationStyle(creditCard, validateCreditCard(creditCard))}
-                            />
                         </div>
                     </div>
                 </Card>

@@ -29,8 +29,8 @@ import type { CalendarDaysIconHandle } from '@/components/icons/CalendarDaysIcon
 const drawerWidth = 260
 const collapsedWidth = 64
 
-const textEnter = { duration: 0.15, ease: 'easeOut', delay: 0.18 }
-const textExit = { duration: 0.1, ease: 'easeOut' }
+const textEnter = { duration: 0.15, ease: 'easeOut' as const, delay: 0.18 }
+const textExit = { duration: 0.1, ease: 'easeOut' as const }
 
 const menuItems = [
   { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },

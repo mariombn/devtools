@@ -3,7 +3,6 @@ import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { PageTitle } from '@/components/Common/PageTitle'
-import { Card, CardContent } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 
@@ -67,67 +66,66 @@ export function MarkdownPreview() {
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
-      <PageTitle>Markdown Preview</PageTitle>
+      <PageTitle description="Write Markdown and see it rendered in real time.">Markdown Preview</PageTitle>
       
       <div className="flex flex-1 gap-6 overflow-hidden">
         {/* Editor */}
-        <Card className="flex w-1/2 flex-col overflow-hidden">
-          <CardContent className="flex flex-1 flex-col gap-3 p-6">
-            <h3 className="text-base font-semibold text-foreground">Editor</h3>
-            <Textarea
-              value={markdown}
-              onChange={(e) => setMarkdown(e.target.value)}
-              placeholder="Digite seu markdown aqui..."
-              className="flex-1 resize-none font-mono text-sm"
-            />
-          </CardContent>
-        </Card>
+        <div className="flex w-1/2 flex-col gap-3 overflow-hidden">
+          <h3 className="text-base font-semibold text-foreground">Editor</h3>
+          <Textarea
+            value={markdown}
+            onChange={(e) => setMarkdown(e.target.value)}
+            placeholder="Digite seu markdown aqui..."
+            className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
+          />
+        </div>
 
         {/* Preview */}
-        <Card className="flex w-1/2 flex-col overflow-hidden">
-          <CardContent className="flex flex-1 flex-col gap-3 p-6">
-            <h3 className="text-base font-semibold text-foreground">Preview</h3>
-            <div className="flex-1 overflow-auto rounded-lg border border-border bg-background p-8">
-              <div className="markdown-preview">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    code(props: any) {
-                      const { inline, className, children, ...rest } = props
-                      const match = /language-(\w+)/.exec(className || '')
-                      const language = match ? match[1] : ''
-                      
-                      return !inline && language ? (
-                        <SyntaxHighlighter
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          style={(isDark ? vscDarkPlus : vs) as any}
-                          language={language}
-                          PreTag="div"
-                          customStyle={{
-                            margin: 0,
-                            padding: '1em',
-                            fontSize: '0.875em',
-                          }}
-                          {...rest}
-                        >
-                          {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className={className} {...rest}>
-                          {children}
-                        </code>
-                      )
-                    }
-                  }}
-                >
-                  {markdown}
-                </ReactMarkdown>
-              </div>
+        <div className="flex w-1/2 flex-col overflow-hidden rounded-lg border border-border bg-muted/40">
+          <div className="flex shrink-0 items-center border-b border-border px-4 py-2.5">
+            <span className="text-sm font-medium text-muted-foreground">Preview</span>
+          </div>
+          <div className="flex-1 overflow-auto px-8 pb-8 pt-4">
+            <div className="markdown-preview">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  code(props: any) {
+                    const { inline, className, children, ...rest } = props
+                    const match = /language-(\w+)/.exec(className || '')
+                    const language = match ? match[1] : ''
+
+                    return !inline && language ? (
+                      <SyntaxHighlighter
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        style={(isDark ? vscDarkPlus : vs) as any}
+                        language={language}
+                        PreTag="div"
+                        customStyle={{
+                          margin: 0,
+                          padding: '1em',
+                          fontSize: '0.875em',
+                        }}
+                        {...rest}
+                      >
+                        {String(children).replace(/\n$/, '')}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...rest}>
+                        {children}
+                      </code>
+                    )
+                  }
+                }}
+              >
+                {markdown}
+              </ReactMarkdown>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
+
   )
 }

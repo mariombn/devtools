@@ -43,7 +43,7 @@ export function GeneratorCard({
             onClick={onGenerate}
             aria-label="Gerar novo"
           >
-            <RefreshCw className="size-4 group-hover:rotate-90 transition-transform duration-200 ease-in-out" />
+            <RefreshCw className="size-4 group-hover:rotate-90 transition-transform duration-200 ease" />
           </Button>
         </div>
 

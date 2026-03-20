@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { motion } from 'motion/react'
 import { Wrench, Github } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
@@ -16,17 +17,20 @@ import { GitCompareIcon } from '@/components/icons/GitCompareIcon'
 import type { GitCompareIconHandle } from '@/components/icons/GitCompareIcon'
 import { ShieldCheckIcon } from '@/components/icons/ShieldCheckIcon'
 import type { ShieldCheckIconHandle } from '@/components/icons/ShieldCheckIcon'
-import { MarkdownIcon } from '@/components/icons/MarkdownIcon'
-import type { MarkdownIconHandle } from '@/components/icons/MarkdownIcon'
-import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
-import type { DatabaseIconHandle } from '@/components/icons/DatabaseIcon'
-import { CheckSquareIcon } from '@/components/icons/CheckSquareIcon'
-import type { CheckSquareIconHandle } from '@/components/icons/CheckSquareIcon'
-import { CalendarIcon } from '@/components/icons/CalendarIcon'
-import type { CalendarIconHandle } from '@/components/icons/CalendarIcon'
+import { ScanTextIcon } from '@/components/icons/ScanTextIcon'
+import type { ScanTextIconHandle } from '@/components/icons/ScanTextIcon'
+import { LayersIcon } from '@/components/icons/LayersIcon'
+import type { LayersIconHandle } from '@/components/icons/LayersIcon'
+import { CircleCheckIcon } from '@/components/icons/CircleCheckIcon'
+import type { CircleCheckIconHandle } from '@/components/icons/CircleCheckIcon'
+import { CalendarDaysIcon } from '@/components/icons/CalendarDaysIcon'
+import type { CalendarDaysIconHandle } from '@/components/icons/CalendarDaysIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
+
+const textEnter = { duration: 0.15, ease: 'easeOut', delay: 0.18 }
+const textExit = { duration: 0.1, ease: 'easeOut' }
 
 const menuItems = [
   { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },
@@ -48,14 +52,15 @@ interface SidebarProps {
 export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps) {
   const navigate = useNavigate()
   const location = useLocation()
+
   const chevronsIconRef = useRef<ChevronsLeftRightIconHandle>(null)
-  const checkSquareIconRef = useRef<CheckSquareIconHandle>(null)
+  const checkSquareIconRef = useRef<CircleCheckIconHandle>(null)
   const usersIconRef = useRef<UsersIconHandle>(null)
   const gitCompareIconRef = useRef<GitCompareIconHandle>(null)
   const shieldCheckIconRef = useRef<ShieldCheckIconHandle>(null)
-  const markdownIconRef = useRef<MarkdownIconHandle>(null)
-  const databaseIconRef = useRef<DatabaseIconHandle>(null)
-  const calendarIconRef = useRef<CalendarIconHandle>(null)
+  const markdownIconRef = useRef<ScanTextIconHandle>(null)
+  const databaseIconRef = useRef<LayersIconHandle>(null)
+  const calendarIconRef = useRef<CalendarDaysIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -64,7 +69,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
 
   const linkClass = (path: string) =>
     cn(
-      'relative flex w-full items-center gap-3 rounded px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150',
+      'relative flex w-full items-center rounded px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150',
       location.pathname === path
         ? 'bg-secondary text-foreground'
         : 'text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
@@ -73,16 +78,21 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const drawerContent = (
     <TooltipProvider delayDuration={0}>
       <div className="flex h-full flex-col">
-        <div className={cn(
-          "flex h-14 shrink-0 items-center border-b border-border md:border-0",
-          collapsed ? "justify-center px-2" : "gap-2 px-4"
-        )}>
-          <div className="flex size-6 items-center justify-center rounded-lg bg-foreground text-background">
+        <div className="flex h-14 shrink-0 items-center gap-2.5 px-4 border-b border-border md:border-0">
+          <div className="flex shrink-0 size-8 items-center justify-center rounded bg-foreground text-background">
             <Wrench className="size-4" />
           </div>
-          {!collapsed && (
-            <span className="font-semibold tracking-tight text-foreground">DevTools</span>
-          )}
+          <motion.span
+            className="overflow-hidden whitespace-nowrap font-semibold tracking-tight text-foreground"
+            initial={false}
+            animate={{
+              opacity: collapsed ? 0 : 1,
+              width: collapsed ? 0 : 'auto',
+              transition: collapsed ? textExit : textEnter,
+            }}
+          >
+            DevTools
+          </motion.span>
         </div>
         <nav className="flex flex-1 flex-col gap-0.5 p-3" aria-label="Main">
           {menuItems.map((item) => {
@@ -110,123 +120,124 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'calendar') calendarIconRef.current?.stopAnimation()
             }
 
-            const buttonContent = (
-              <button
-                key={item.text}
-                type="button"
-                className={cn(
-                  linkClass(item.path),
-                  collapsed && "justify-center px-2"
-                )}
-                onClick={() => handleNavigation(item.path)}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                {isActive && (
-                  <span
-                    className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-foreground"
-                    aria-hidden
-                  />
-                )}
-                {animatedType === 'chevrons' ? (
-                  <ChevronsLeftRightIcon
-                    ref={chevronsIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'checkSquare' ? (
-                  <CheckSquareIcon
-                    ref={checkSquareIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'users' ? (
-                  <UsersIcon
-                    ref={usersIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'gitCompare' ? (
-                  <GitCompareIcon
-                    ref={gitCompareIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'shieldCheck' ? (
-                  <ShieldCheckIcon
-                    ref={shieldCheckIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'markdown' ? (
-                  <MarkdownIcon
-                    ref={markdownIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'database' ? (
-                  <DatabaseIcon
-                    ref={databaseIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : animatedType === 'calendar' ? (
-                  <CalendarIcon
-                    ref={calendarIconRef}
-                    size={18}
-                    className="shrink-0 opacity-80"
-                  />
-                ) : null}
-                {!collapsed && <span>{item.text}</span>}
-              </button>
-            )
-
-            return collapsed ? (
+            return (
               <Tooltip key={item.text}>
                 <TooltipTrigger asChild>
-                  {buttonContent}
+                  <button
+                    type="button"
+                    className={linkClass(item.path)}
+                    onClick={() => handleNavigation(item.path)}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    {isActive && (
+                      <span
+                        className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-foreground"
+                        aria-hidden
+                      />
+                    )}
+                    {animatedType === 'chevrons' ? (
+                      <ChevronsLeftRightIcon
+                        ref={chevronsIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'checkSquare' ? (
+                      <CircleCheckIcon
+                        ref={checkSquareIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'users' ? (
+                      <UsersIcon
+                        ref={usersIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'gitCompare' ? (
+                      <GitCompareIcon
+                        ref={gitCompareIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'shieldCheck' ? (
+                      <ShieldCheckIcon
+                        ref={shieldCheckIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'markdown' ? (
+                      <ScanTextIcon
+                        ref={markdownIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'database' ? (
+                      <LayersIcon
+                        ref={databaseIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'calendar' ? (
+                      <CalendarDaysIcon
+                        ref={calendarIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : null}
+                    <motion.span
+                      className="overflow-hidden whitespace-nowrap"
+                      initial={false}
+                      animate={{
+                        opacity: collapsed ? 0 : 1,
+                        width: collapsed ? 0 : 'auto',
+                        marginLeft: collapsed ? 0 : 12,
+                        transition: collapsed ? textExit : textEnter,
+                      }}
+                    >
+                      {item.text}
+                    </motion.span>
+                  </button>
                 </TooltipTrigger>
-                <TooltipContent side="right">
-                  {item.text}
-                </TooltipContent>
+                {collapsed && (
+                  <TooltipContent side="right" sideOffset={8}>
+                    {item.text}
+                  </TooltipContent>
+                )}
               </Tooltip>
-            ) : (
-              buttonContent
             )
           })}
         </nav>
-        <div className={cn(
-          "border-t border-border p-3",
-          collapsed ? "flex justify-center" : "flex items-center gap-2"
-        )}>
-          {collapsed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  href="https://github.com/mariombn/devtools"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                  aria-label="GitHub Repository"
+        <div className="border-t border-border p-3">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                href="https://github.com/mariombn/devtools"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                aria-label="GitHub Repository"
+              >
+                <Github className="shrink-0 size-4" />
+                <motion.span
+                  className="overflow-hidden whitespace-nowrap"
+                  initial={false}
+                  animate={{
+                    opacity: collapsed ? 0 : 1,
+                    width: collapsed ? 0 : 'auto',
+                    transition: collapsed ? textExit : textEnter,
+                  }}
                 >
-                  <Github className="size-4" />
-                </a>
-              </TooltipTrigger>
-              <TooltipContent side="right">
+                  GitHub Repository
+                </motion.span>
+              </a>
+            </TooltipTrigger>
+            {collapsed && (
+              <TooltipContent side="right" sideOffset={8}>
                 GitHub Repository
               </TooltipContent>
-            </Tooltip>
-          ) : (
-            <a
-              href="https://github.com/mariombn/devtools"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-            >
-              <Github className="size-4" />
-              <span>GitHub Repository</span>
-            </a>
-          )}
+            )}
+          </Tooltip>
         </div>
       </div>
     </TooltipProvider>
@@ -255,7 +266,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
       </aside>
 
       <aside
-        className="hidden shrink-0 flex-col border-r border-border bg-card/95 backdrop-blur transition-all duration-300 ease-in-out md:flex"
+        className="hidden shrink-0 flex-col border-r border-border bg-card/95 backdrop-blur transition-[width] duration-300 ease-in-out md:flex"
         style={{ width: collapsed ? collapsedWidth : drawerWidth }}
       >
         {drawerContent}

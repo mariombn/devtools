@@ -29,16 +29,16 @@ export function MainLayout({ children, title, fullWidth = false }: MainLayoutPro
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar mobileOpen={mobileOpen} onClose={handleDrawerToggle} collapsed={sidebarCollapsed} />
-      <div className="flex min-h-screen flex-1 flex-col">
-        <TopBar 
-          title={title} 
-          onMenuClick={handleDrawerToggle} 
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <TopBar
+          title={title}
+          onMenuClick={handleDrawerToggle}
           onSidebarToggle={handleSidebarToggle}
           sidebarCollapsed={sidebarCollapsed}
         />
-        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-8">
           {fullWidth ? (
             children
           ) : (

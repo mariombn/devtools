@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PageTitle } from '@/components/Common/PageTitle'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -67,13 +68,9 @@ export function BcryptGenerator() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Bcrypt Hash Generator</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          A simple tool to generate and verify bcrypt hashes. All processing happens in your browser for security.
-        </p>
-      </div>
+      <PageTitle description="Generate and verify bcrypt hashes. All processing happens in your browser for security.">
+        Bcrypt Hash Generator
+      </PageTitle>
 
       {/* Generate Hash Card */}
       <Card className="p-6">

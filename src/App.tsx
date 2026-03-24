@@ -17,7 +17,7 @@ function App() {
         <Route
           path="/json"
           element={
-            <MainLayout title="JSON Toolkit">
+            <MainLayout title="JSON Toolkit" fullWidth>
               <JsonToolkit />
             </MainLayout>
           }
@@ -41,7 +41,7 @@ function App() {
         <Route
           path="/diff"
           element={
-            <MainLayout title="Text Comparator">
+            <MainLayout title="Text Comparator" fullWidth>
               <TextComparator />
             </MainLayout>
           }

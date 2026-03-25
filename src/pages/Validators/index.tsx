@@ -93,6 +93,15 @@ const validateCreditCard = (cardNumber: string): boolean => {
     return sum % 10 === 0
 }
 
+function ValidationIcon({ value, isValid }: { value: string; isValid: boolean }) {
+    if (!value) return null
+    return isValid ? (
+        <CheckCircle className="h-4 w-4 text-success" />
+    ) : (
+        <XCircle className="h-4 w-4 text-destructive" />
+    )
+}
+
 export function Validators() {
     const [cpf, setCpf] = useState('')
     const [cnpj, setCnpj] = useState('')
@@ -104,15 +113,6 @@ export function Validators() {
         return isValid
             ? 'border-green-500 focus-visible:ring-green-500'
             : 'border-red-500 focus-visible:ring-red-500'
-    }
-
-    const ValidationIcon = ({ value, isValid }: { value: string; isValid: boolean }) => {
-        if (!value) return null
-        return isValid ? (
-            <CheckCircle className="h-4 w-4 text-success" />
-        ) : (
-            <XCircle className="h-4 w-4 text-destructive" />
-        )
     }
 
     return (

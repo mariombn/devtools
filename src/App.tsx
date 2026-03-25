@@ -8,6 +8,7 @@ import { MarkdownPreview } from '@/pages/MarkdownPreview'
 import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
 import { DatesToolkit } from '@/pages/DatesToolkit'
+import { RegexTools } from '@/pages/RegexTools'
 
 function App() {
   return (
@@ -75,6 +76,14 @@ function App() {
           element={
             <MainLayout title="Date & Time Tools">
               <DatesToolkit />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/regex"
+          element={
+            <MainLayout title="Regex Tools" fullWidth>
+              <RegexTools />
             </MainLayout>
           }
         />

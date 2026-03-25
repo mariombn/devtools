@@ -25,6 +25,8 @@ import { CircleCheckIcon } from '@/components/icons/CircleCheckIcon'
 import type { CircleCheckIconHandle } from '@/components/icons/CircleCheckIcon'
 import { CalendarDaysIcon } from '@/components/icons/CalendarDaysIcon'
 import type { CalendarDaysIconHandle } from '@/components/icons/CalendarDaysIcon'
+import { RegexIcon } from '@/components/icons/RegexIcon'
+import type { RegexIconHandle } from '@/components/icons/RegexIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -41,6 +43,7 @@ const menuItems = [
   { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
   { text: 'SQL Tools', path: '/sql', animatedIcon: 'database' as const },
   { text: 'Date & Time Tools', path: '/dates', animatedIcon: 'calendar' as const },
+  { text: 'Regex Tools', path: '/regex', animatedIcon: 'regex' as const },
 ] as const
 
 interface SidebarProps {
@@ -61,6 +64,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const markdownIconRef = useRef<ScanTextIconHandle>(null)
   const databaseIconRef = useRef<LayersIconHandle>(null)
   const calendarIconRef = useRef<CalendarDaysIconHandle>(null)
+  const regexIconRef = useRef<RegexIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -108,6 +112,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'markdown') markdownIconRef.current?.startAnimation()
               if (animatedType === 'database') databaseIconRef.current?.startAnimation()
               if (animatedType === 'calendar') calendarIconRef.current?.startAnimation()
+              if (animatedType === 'regex') regexIconRef.current?.startAnimation()
             }
             const handleMouseLeave = () => {
               if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
@@ -118,6 +123,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'markdown') markdownIconRef.current?.stopAnimation()
               if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
               if (animatedType === 'calendar') calendarIconRef.current?.stopAnimation()
+              if (animatedType === 'regex') regexIconRef.current?.stopAnimation()
             }
 
             return (
@@ -181,6 +187,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                     ) : animatedType === 'calendar' ? (
                       <CalendarDaysIcon
                         ref={calendarIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'regex' ? (
+                      <RegexIcon
+                        ref={regexIconRef}
                         size={18}
                         className="shrink-0 opacity-80"
                       />

@@ -79,8 +79,8 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
         : 'text-muted-foreground hover:bg-secondary/80 hover:text-foreground'
     )
 
-  const drawerContent = (
-    <TooltipProvider delayDuration={0}>
+  const drawerContent = (isCollapsed: boolean) => (
+    <TooltipProvider key={String(isCollapsed)} delayDuration={0}>
       <div className="flex h-full flex-col">
         <div className="flex h-14 shrink-0 items-center gap-2.5 px-4 border-b border-border md:border-0">
           <div className="flex shrink-0 size-8 items-center justify-center rounded bg-foreground text-background">
@@ -90,9 +90,9 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
             className="overflow-hidden whitespace-nowrap font-semibold tracking-tight text-foreground"
             initial={false}
             animate={{
-              opacity: collapsed ? 0 : 1,
-              width: collapsed ? 0 : 'auto',
-              transition: collapsed ? textExit : textEnter,
+              opacity: isCollapsed ? 0 : 1,
+              width: isCollapsed ? 0 : 'auto',
+              transition: isCollapsed ? textExit : textEnter,
             }}
           >
             DevTools
@@ -201,17 +201,17 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                       className="overflow-hidden whitespace-nowrap"
                       initial={false}
                       animate={{
-                        opacity: collapsed ? 0 : 1,
-                        width: collapsed ? 0 : 'auto',
-                        marginLeft: collapsed ? 0 : 12,
-                        transition: collapsed ? textExit : textEnter,
+                        opacity: isCollapsed ? 0 : 1,
+                        width: isCollapsed ? 0 : 'auto',
+                        marginLeft: isCollapsed ? 0 : 12,
+                        transition: isCollapsed ? textExit : textEnter,
                       }}
                     >
                       {item.text}
                     </motion.span>
                   </button>
                 </TooltipTrigger>
-                {collapsed && (
+                {isCollapsed && (
                   <TooltipContent side="right" sideOffset={8}>
                     {item.text}
                   </TooltipContent>
@@ -235,16 +235,16 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                   className="overflow-hidden whitespace-nowrap"
                   initial={false}
                   animate={{
-                    opacity: collapsed ? 0 : 1,
-                    width: collapsed ? 0 : 'auto',
-                    transition: collapsed ? textExit : textEnter,
+                    opacity: isCollapsed ? 0 : 1,
+                    width: isCollapsed ? 0 : 'auto',
+                    transition: isCollapsed ? textExit : textEnter,
                   }}
                 >
                   GitHub Repository
                 </motion.span>
               </a>
             </TooltipTrigger>
-            {collapsed && (
+            {isCollapsed && (
               <TooltipContent side="right" sideOffset={8}>
                 GitHub Repository
               </TooltipContent>
@@ -274,14 +274,14 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
         )}
         style={{ '--sidebar-width': `${drawerWidth}px` } as React.CSSProperties}
       >
-        {drawerContent}
+        {drawerContent(false)}
       </aside>
 
       <aside
         className="hidden shrink-0 flex-col border-r border-border bg-card/95 backdrop-blur transition-[width] duration-300 ease-in-out md:flex"
         style={{ width: collapsed ? collapsedWidth : drawerWidth }}
       >
-        {drawerContent}
+        {drawerContent(collapsed)}
       </aside>
     </>
   )

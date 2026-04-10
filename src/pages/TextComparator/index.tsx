@@ -7,10 +7,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import * as Diff from 'diff'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 type ViewMode = 'split' | 'unified'
 
 export function TextComparator() {
+  const { t } = useLanguage()
   const [originalText, setOriginalText] = useLocalStorage('diff-original', '')
   const [modifiedText, setModifiedText] = useLocalStorage('diff-modified', '')
   const [viewMode, setViewMode] = useState<ViewMode>('split')
@@ -95,7 +97,7 @@ export function TextComparator() {
         <Card className="max-h-[600px] overflow-auto">
           <CardHeader className="py-3">
             <h3 className="text-sm font-medium text-muted-foreground">
-              Original
+              {t('diff.original')}
             </h3>
           </CardHeader>
           <CardContent className="space-y-0 p-4 pt-0 font-mono text-sm">
@@ -116,7 +118,7 @@ export function TextComparator() {
         <Card className="max-h-[600px] overflow-auto">
           <CardHeader className="py-3">
             <h3 className="text-sm font-medium text-muted-foreground">
-              Modified
+              {t('diff.modified')}
             </h3>
           </CardHeader>
           <CardContent className="space-y-0 p-4 pt-0 font-mono text-sm">
@@ -140,7 +142,7 @@ export function TextComparator() {
 
   return (
     <div>
-      <PageTitle description="Compare two texts and see line-by-line differences.">Text Comparator</PageTitle>
+      <PageTitle description={t('diff.description')}>{t('diff.title')}</PageTitle>
 
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <ToggleGroup
@@ -149,11 +151,11 @@ export function TextComparator() {
         >
           <ToggleGroupItem value="split">
             <Columns className="size-4" />
-            Split
+            {t('diff.split')}
           </ToggleGroupItem>
           <ToggleGroupItem value="unified">
             <Rows className="size-4" />
-            Unified
+            {t('diff.unified')}
           </ToggleGroupItem>
         </ToggleGroup>
       </div>
@@ -162,28 +164,28 @@ export function TextComparator() {
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader className="pb-2">
-              <h2 className="text-base font-semibold text-foreground">Original Text</h2>
+              <h2 className="text-base font-semibold text-foreground">{t('diff.originalText')}</h2>
             </CardHeader>
             <CardContent>
               <Textarea
                 className="min-h-[240px] font-mono text-sm"
                 value={originalText}
                 onChange={(e) => setOriginalText(e.target.value)}
-                placeholder="Enter original text here..."
+                placeholder={t('diff.originalPlaceholder')}
               />
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <h2 className="text-base font-semibold text-foreground">Modified Text</h2>
+              <h2 className="text-base font-semibold text-foreground">{t('diff.modifiedText')}</h2>
             </CardHeader>
             <CardContent>
               <Textarea
                 className="min-h-[240px] font-mono text-sm"
                 value={modifiedText}
                 onChange={(e) => setModifiedText(e.target.value)}
-                placeholder="Enter modified text here..."
+                placeholder={t('diff.modifiedPlaceholder')}
               />
             </CardContent>
           </Card>
@@ -191,7 +193,7 @@ export function TextComparator() {
 
         {(originalText || modifiedText) && (
           <div>
-            <h2 className="mb-4 text-base font-semibold text-foreground">Comparison Result</h2>
+            <h2 className="mb-4 text-base font-semibold text-foreground">{t('diff.comparisonResult')}</h2>
             {viewMode === 'split' ? renderSplitView() : renderUnifiedView()}
           </div>
         )}

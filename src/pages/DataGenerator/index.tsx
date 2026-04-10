@@ -25,8 +25,10 @@ import { generateEmail } from '@/utils/generators/emailGenerator'
 import { generatePassword } from '@/utils/generators/passwordGenerator'
 import { generateLorem } from '@/utils/generators/loremGenerator'
 import type { LoremType } from '@/utils/generators/loremGenerator'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function DataGenerator() {
+  const { t } = useLanguage()
   const [cpf, setCpf] = useState('')
   const [cpfFormatted, setCpfFormatted] = useState(true)
 
@@ -104,9 +106,9 @@ export function DataGenerator() {
     <div>
       <div className="flex justify-between items-start">
 
-        <PageTitle description="Generate CPF, CNPJ, phone, CEP, names, emails, and passwords.">Data Generator</PageTitle>
+        <PageTitle description={t('generator.description')}>{t('generator.title')}</PageTitle>
         <Button size="lg" onClick={handleGenerateAll} className="shrink-0">
-          Generate All
+          {t('generator.generateAll')}
         </Button>
       </div>
 
@@ -126,7 +128,7 @@ export function DataGenerator() {
                   setCpfFormatted(checked === true)
                 }
               />
-              {checkboxLabel('cpf-format', 'Formatted')}
+              {checkboxLabel('cpf-format', t('generator.formatted'))}
             </div>
           }
         />
@@ -146,7 +148,7 @@ export function DataGenerator() {
                   setCnpjFormatted(checked === true)
                 }
               />
-              {checkboxLabel('cnpj-format', 'Formatted')}
+              {checkboxLabel('cnpj-format', t('generator.formatted'))}
             </div>
           }
         />
@@ -167,7 +169,7 @@ export function DataGenerator() {
                     setPhoneType(checked ? 'mobile' : 'landline')
                   }
                 />
-                {checkboxLabel('phone-mobile', 'Mobile')}
+                {checkboxLabel('phone-mobile', t('generator.mobile'))}
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -177,7 +179,7 @@ export function DataGenerator() {
                     setPhoneWithDDD(checked === true)
                   }
                 />
-                {checkboxLabel('phone-ddd', 'DDD')}
+                {checkboxLabel('phone-ddd', t('generator.ddd'))}
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
@@ -187,7 +189,7 @@ export function DataGenerator() {
                     setPhoneFormatted(checked === true)
                   }
                 />
-                {checkboxLabel('phone-format', 'Format')}
+                {checkboxLabel('phone-format', t('generator.format'))}
               </div>
             </div>
           }
@@ -208,7 +210,7 @@ export function DataGenerator() {
                   setCepFormatted(checked === true)
                 }
               />
-              {checkboxLabel('cep-format', 'Formatted')}
+              {checkboxLabel('cep-format', t('generator.formatted'))}
             </div>
           }
         />
@@ -321,7 +323,7 @@ export function DataGenerator() {
                       checked && setLoremType('paragraphs')
                     }
                   />
-                  {checkboxLabel('lorem-paragraphs', 'Paragraphs')}
+                  {checkboxLabel('lorem-paragraphs', t('generator.paragraphs'))}
                 </div>
                 <div className="flex items-center gap-2">
                   <Checkbox
@@ -331,7 +333,7 @@ export function DataGenerator() {
                       checked && setLoremType('sentences')
                     }
                   />
-                  {checkboxLabel('lorem-sentences', 'Sentences')}
+                  {checkboxLabel('lorem-sentences', t('generator.sentences'))}
                 </div>
                 <div className="flex items-center gap-2">
                   <Checkbox
@@ -341,7 +343,7 @@ export function DataGenerator() {
                       checked && setLoremType('words')
                     }
                   />
-                  {checkboxLabel('lorem-words', 'Words')}
+                  {checkboxLabel('lorem-words', t('generator.words'))}
                 </div>
                 <Input
                   type="number"

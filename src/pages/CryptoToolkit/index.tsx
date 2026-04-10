@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Copy, Check, Lock, Unlock, RefreshCw, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLanguage, type TranslationKey } from '@/i18n/LanguageContext'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -41,7 +42,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'base64',
     label: 'Base64',
-    description: 'Encode/decode binary data as ASCII text. Not encryption — encoding only.',
+    description: 'crypto.algoBase64Desc',
     requiresKey: false,
     bidirectional: true,
     category: 'encoding',
@@ -50,7 +51,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'md5',
     label: 'MD5',
-    description: 'Produces a 128-bit hash. Deprecated for security — use SHA-256 or higher.',
+    description: 'crypto.algoMd5Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -58,7 +59,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'sha1',
     label: 'SHA-1',
-    description: 'Produces a 160-bit hash. Deprecated for cryptographic use.',
+    description: 'crypto.algoSha1Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -66,7 +67,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'sha256',
     label: 'SHA-256',
-    description: 'Part of SHA-2 family. Widely used for integrity verification and digital signatures.',
+    description: 'crypto.algoSha256Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -74,7 +75,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'sha384',
     label: 'SHA-384',
-    description: 'Stronger SHA-2 variant with a 384-bit output.',
+    description: 'crypto.algoSha384Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -82,7 +83,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'sha512',
     label: 'SHA-512',
-    description: 'Strongest SHA-2 variant providing 512-bit output.',
+    description: 'crypto.algoSha512Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -90,7 +91,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'sha3',
     label: 'SHA-3 (256)',
-    description: 'SHA-3 (Keccak) is the latest NIST hash standard, resistant to length-extension attacks.',
+    description: 'crypto.algoSha3Desc',
     requiresKey: false,
     bidirectional: false,
     category: 'hash',
@@ -99,7 +100,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'aes',
     label: 'AES',
-    description: 'Advanced Encryption Standard — the current gold standard for symmetric encryption.',
+    description: 'crypto.algoAesDesc',
     requiresKey: true,
     bidirectional: true,
     category: 'symmetric',
@@ -107,7 +108,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'des',
     label: 'DES',
-    description: 'Data Encryption Standard — legacy cipher, 56-bit key. Do NOT use in production.',
+    description: 'crypto.algoDesDesc',
     requiresKey: true,
     bidirectional: true,
     category: 'symmetric',
@@ -115,7 +116,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'tripledes',
     label: '3DES (Triple DES)',
-    description: 'Applies DES three times. More secure than DES but slower; superseded by AES.',
+    description: 'crypto.algoTripleDesDesc',
     requiresKey: true,
     bidirectional: true,
     category: 'symmetric',
@@ -123,7 +124,7 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'rabbit',
     label: 'Rabbit',
-    description: 'Fast stream cipher with 128-bit key. High performance for large data.',
+    description: 'crypto.algoRabbitDesc',
     requiresKey: true,
     bidirectional: true,
     category: 'symmetric',
@@ -131,17 +132,17 @@ const ALGORITHMS: Algorithm[] = [
   {
     id: 'rc4',
     label: 'RC4',
-    description: 'Stream cipher — fast and simple but cryptographically broken. Avoid in production.',
+    description: 'crypto.algoRc4Desc',
     requiresKey: true,
     bidirectional: true,
     category: 'symmetric',
   },
 ]
 
-const CATEGORY_LABELS: Record<Algorithm['category'], string> = {
-  encoding: 'Encoding',
-  hash: 'Hash Functions',
-  symmetric: 'Symmetric Encryption',
+const CATEGORY_KEYS: Record<Algorithm['category'], string> = {
+  encoding: 'crypto.categoryEncoding',
+  hash: 'crypto.categoryHash',
+  symmetric: 'crypto.categorySymmetric',
 }
 
 const CATEGORY_COLORS: Record<Algorithm['category'], string> = {
@@ -209,6 +210,7 @@ interface CategoryBadgeProps {
 }
 
 function CategoryBadge({ category }: CategoryBadgeProps) {
+  const { t } = useLanguage()
   return (
     <span
       className={cn(
@@ -216,7 +218,7 @@ function CategoryBadge({ category }: CategoryBadgeProps) {
         CATEGORY_COLORS[category]
       )}
     >
-      {CATEGORY_LABELS[category]}
+      {t(CATEGORY_KEYS[category] as TranslationKey)}
     </span>
   )
 }
@@ -255,6 +257,7 @@ function AlgorithmCard({ algorithm, isSelected, onSelect }: AlgorithmCardProps) 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export function CryptoToolkit() {
+  const { t } = useLanguage()
   const [selectedId, setSelectedId] = useState<AlgorithmId>('aes')
   const [inputText, setInputText] = useState('')
   const [secretKey, setSecretKey] = useState('')
@@ -275,15 +278,15 @@ export function CryptoToolkit() {
             ? encrypt(selectedId, inputText, secretKey)
             : decrypt(selectedId, inputText, secretKey)
 
-        if (!result) throw new Error('Empty result — check your input and key.')
+        if (!result) throw new Error(t('crypto.errorEmpty'))
         setOutputText(result)
         setLastAction(action)
       } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Unknown error occurred'
-        setError(msg || 'An error occurred. Check your input and key.')
+        const msg = e instanceof Error ? e.message : t('crypto.errorUnknown')
+        setError(msg || t('crypto.errorUnknown'))
       }
     },
-    [selectedId, inputText, secretKey]
+    [selectedId, inputText, secretKey, t]
   )
 
   const handleSwap = useCallback(() => {
@@ -327,8 +330,8 @@ export function CryptoToolkit() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageTitle description="Encrypt, decrypt, hash and encode values using the most popular cryptographic algorithms. All processing runs entirely in your browser.">
-        Crypto Toolkit
+      <PageTitle description={t('crypto.description')}>
+        {t('crypto.title')}
       </PageTitle>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr]">
@@ -336,13 +339,13 @@ export function CryptoToolkit() {
         <div className="flex flex-col gap-4">
           <Card className="p-4">
             <h2 className="mb-3 text-sm font-semibold text-foreground uppercase tracking-wider">
-              Algorithms
+              {t('crypto.algorithms')}
             </h2>
             <div className="flex flex-col gap-4">
               {categoryOrder.map((category) => (
                 <div key={category}>
                   <p className="mb-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {CATEGORY_LABELS[category]}
+                    {t(CATEGORY_KEYS[category] as TranslationKey)}
                   </p>
                   <div className="flex flex-col gap-1.5">
                     {grouped[category]?.map((algo) => (
@@ -375,15 +378,15 @@ export function CryptoToolkit() {
                   {selectedAlgo.bidirectional ? (
                     <span className="inline-flex items-center gap-1 rounded-full border border-green-500/30 bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
                       <RefreshCw className="size-2.5" />
-                      Reversible
+                      {t('crypto.reversible')}
                     </span>
                   ) : (
                     <span className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/10 px-2 py-0.5 text-xs font-medium text-orange-600 dark:text-orange-400">
-                      One-Way
+                      {t('crypto.oneWay')}
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{selectedAlgo.description}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{t(selectedAlgo.description as TranslationKey)}</p>
               </div>
             </div>
           </Card>
@@ -392,17 +395,17 @@ export function CryptoToolkit() {
           {selectedAlgo.requiresKey && (
             <Card className="p-4">
               <div className="space-y-2">
-                <Label htmlFor="secret-key">Secret Key / Passphrase</Label>
+                <Label htmlFor="secret-key">{t('crypto.secretKey')}</Label>
                 <Input
                   id="secret-key"
                   type="password"
-                  placeholder="Enter your secret key..."
+                  placeholder={t('crypto.secretKeyPlaceholder')}
                   value={secretKey}
                   onChange={(e) => setSecretKey(e.target.value)}
                   className="font-mono"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Use a strong, unique key. The same key must be used for both encryption and decryption.
+                  {t('crypto.secretKeyHint')}
                 </p>
               </div>
             </Card>
@@ -412,17 +415,17 @@ export function CryptoToolkit() {
           <Card className="p-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <Label htmlFor="input-text">Input</Label>
+                <Label htmlFor="input-text">{t('crypto.inputLabel')}</Label>
                 <Button variant="ghost" size="sm" onClick={handleClear} className="h-7 text-xs text-muted-foreground">
-                  Clear
+                  {t('common.clear')}
                 </Button>
               </div>
               <Textarea
                 id="input-text"
                 placeholder={
                   selectedAlgo.bidirectional
-                    ? 'Enter text to encrypt or ciphertext to decrypt...'
-                    : 'Enter text to hash...'
+                    ? t('crypto.inputPlaceholderBidirectional')
+                    : t('crypto.inputPlaceholderHash')
                 }
                 value={inputText}
                 onChange={(e) => {
@@ -445,10 +448,10 @@ export function CryptoToolkit() {
             >
               <Lock className="size-4" />
               {selectedAlgo.category === 'hash'
-                ? 'Generate Hash'
+                ? t('crypto.generateHash')
                 : selectedAlgo.category === 'encoding'
-                  ? 'Encode'
-                  : 'Encrypt'}
+                  ? t('crypto.encode')
+                  : t('crypto.encrypt')}
             </Button>
 
             {selectedAlgo.bidirectional && (
@@ -459,7 +462,7 @@ export function CryptoToolkit() {
                 className="flex-1 gap-2"
               >
                 <Unlock className="size-4" />
-                {selectedAlgo.category === 'encoding' ? 'Decode' : 'Decrypt'}
+                {selectedAlgo.category === 'encoding' ? t('crypto.decode') : t('crypto.decrypt')}
               </Button>
             )}
           </div>
@@ -471,16 +474,16 @@ export function CryptoToolkit() {
                 <div className="flex items-center justify-between">
                   <Label>
                     {error
-                      ? 'Error'
+                      ? t('crypto.errorUnknown')
                       : lastAction === 'decrypt'
                         ? selectedAlgo.category === 'encoding'
-                          ? 'Decoded Output'
-                          : 'Decrypted Output'
+                          ? t('crypto.decodedOutput')
+                          : t('crypto.decryptedOutput')
                         : selectedAlgo.category === 'hash'
-                          ? 'Hash Output'
+                          ? t('crypto.hashOutput')
                           : selectedAlgo.category === 'encoding'
-                            ? 'Encoded Output'
-                            : 'Encrypted Output'}
+                            ? t('crypto.encodedOutput')
+                            : t('crypto.encryptedOutput')}
                   </Label>
 
                   {outputText && (
@@ -493,7 +496,7 @@ export function CryptoToolkit() {
                           className="h-7 gap-1 text-xs text-muted-foreground"
                         >
                           <RefreshCw className="size-3" />
-                          Use as Input
+                          {t('crypto.useAsInput')}
                         </Button>
                       )}
                       <Button
@@ -505,12 +508,12 @@ export function CryptoToolkit() {
                         {copied ? (
                           <>
                             <Check className="size-3 text-green-500" />
-                            <span className="text-green-500">Copied!</span>
+                            <span className="text-green-500">{t('crypto.copied')}</span>
                           </>
                         ) : (
                           <>
                             <Copy className="size-3" />
-                            Copy
+                            {t('crypto.copy')}
                           </>
                         )}
                       </Button>
@@ -540,11 +543,9 @@ export function CryptoToolkit() {
             <div className="flex gap-3">
               <Info className="mt-0.5 size-4 shrink-0 text-amber-500" />
               <div className="space-y-1">
-                <p className="text-sm font-medium text-amber-600 dark:text-amber-400">Security Notice</p>
+                <p className="text-sm font-medium text-amber-600 dark:text-amber-400">{t('crypto.securityNotice')}</p>
                 <p className="text-xs text-muted-foreground">
-                  All operations run entirely in your browser — no data is ever transmitted to any server.
-                  Hash functions (MD5, SHA) are one-way and cannot be reversed. For production applications,
-                  prefer AES-256 for symmetric encryption and SHA-256 or SHA-3 for hashing.
+                  {t('crypto.securityNoticeText')}
                 </p>
               </div>
             </div>

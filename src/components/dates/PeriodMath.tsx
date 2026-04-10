@@ -8,8 +8,10 @@ import {
     addDays, subDays, addWeeks, subWeeks, addMonths, subMonths,
     addBusinessDays, subBusinessDays, format, isValid
 } from 'date-fns'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function PeriodMath() {
+    const { t } = useLanguage()
     const [baseDate, setBaseDate] = useState<string>('')
 
     // Math operation
@@ -36,7 +38,7 @@ export function PeriodMath() {
 
         const parsed = new Date(baseDate)
         if (!isValid(parsed)) {
-            setError('Invalid base date')
+            setError(t('dates.invalidBaseDate'))
             setResultDate('-')
             setResultFormatted('-')
             return
@@ -87,7 +89,7 @@ export function PeriodMath() {
 
         setResultDate(format(calculated, "yyyy-MM-dd'T'HH:mm:ss"))
         setResultFormatted(format(calculated, 'PPpp'))
-    }, [baseDate, operation, unit, amount, businessDaysOnly])
+    }, [baseDate, operation, unit, amount, businessDaysOnly, t])
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -109,12 +111,12 @@ export function PeriodMath() {
         <div className="grid gap-6 md:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Date Mathematics</CardTitle>
-                    <CardDescription>Add or subtract time periods securely</CardDescription>
+                    <CardTitle>{t('dates.dateMath')}</CardTitle>
+                    <CardDescription>{t('dates.dateMathDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
-                        <Label htmlFor="base-date">Base Date</Label>
+                        <Label htmlFor="base-date">{t('dates.baseDate')}</Label>
                         <Input
                             id="base-date"
                             type="datetime-local"
@@ -125,25 +127,25 @@ export function PeriodMath() {
 
                     <div className="grid grid-cols-3 gap-2 items-end">
                         <div className="space-y-2">
-                            <Label>Operation</Label>
+                            <Label>{t('dates.operation')}</Label>
                             <div className="flex border rounded-md">
                                 <button
                                     className={`flex-1 flex items-center justify-center p-2 rounded-l-md transition-colors ${operation === 'add' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
                                     onClick={() => setOperation('add')}
                                 >
-                                    <Plus className="w-4 h-4 mr-1" /> Add
+                                    <Plus className="w-4 h-4 mr-1" /> {t('dates.add')}
                                 </button>
                                 <button
                                     className={`flex-1 flex items-center justify-center p-2 rounded-r-md transition-colors ${operation === 'subtract' ? 'bg-primary text-primary-foreground' : 'hover:bg-accent'}`}
                                     onClick={() => setOperation('subtract')}
                                 >
-                                    <Minus className="w-4 h-4 mr-1" /> Sub
+                                    <Minus className="w-4 h-4 mr-1" /> {t('dates.subtract')}
                                 </button>
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="amount">Amount</Label>
+                            <Label htmlFor="amount">{t('dates.amount')}</Label>
                             <Input
                                 id="amount"
                                 type="number"
@@ -154,16 +156,16 @@ export function PeriodMath() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="unit">Unit</Label>
+                            <Label htmlFor="unit">{t('dates.unit')}</Label>
                             <select
                                 id="unit"
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 value={unit}
                                 onChange={e => setUnit(e.target.value as 'days' | 'weeks' | 'months')}
                             >
-                                <option value="days">Days</option>
-                                <option value="weeks">Weeks</option>
-                                <option value="months">Months</option>
+                                <option value="days">{t('dates.unitDays')}</option>
+                                <option value="weeks">{t('dates.unitWeeks')}</option>
+                                <option value="months">{t('dates.unitMonths')}</option>
                             </select>
                         </div>
                     </div>
@@ -177,7 +179,7 @@ export function PeriodMath() {
                             onChange={e => setBusinessDaysOnly(e.target.checked)}
                         />
                         <Label htmlFor="business-days" className="font-normal cursor-pointer">
-                            Business Days Only (Skip weekends)
+                            {t('dates.businessDaysOnly')}
                         </Label>
                     </div>
                 </CardContent>
@@ -185,8 +187,8 @@ export function PeriodMath() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Result</CardTitle>
-                    <CardDescription>Shifted date calculation</CardDescription>
+                    <CardTitle>{t('dates.result')}</CardTitle>
+                    <CardDescription>{t('dates.shiftedDate')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {error ? (
@@ -195,7 +197,7 @@ export function PeriodMath() {
                         <>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <Label className="text-sm font-semibold">Human Readable</Label>
+                                    <Label className="text-sm font-semibold">{t('dates.humanReadableLabel')}</Label>
                                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(resultFormatted)}>
                                         <Copy className="h-3 w-3" />
                                     </Button>
@@ -205,7 +207,7 @@ export function PeriodMath() {
 
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <Label className="text-sm font-semibold">ISO 8601 String</Label>
+                                    <Label className="text-sm font-semibold">{t('dates.iso8601String')}</Label>
                                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(resultDate)}>
                                         <Copy className="h-3 w-3" />
                                     </Button>

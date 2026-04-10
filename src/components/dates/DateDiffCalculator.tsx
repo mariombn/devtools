@@ -12,8 +12,10 @@ import {
     format,
     isValid
 } from 'date-fns'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function DateDiffCalculator() {
+    const { t } = useLanguage()
     const [startDate, setStartDate] = useState<string>('')
     const [endDate, setEndDate] = useState<string>('')
 
@@ -39,7 +41,7 @@ export function DateDiffCalculator() {
         const end = new Date(endDate)
 
         if (!isValid(start) || !isValid(end)) {
-            setError('Invalid date format')
+            setError(t('dates.invalidDateFormat'))
             setTotalDays(null)
             return
         }
@@ -73,7 +75,7 @@ export function DateDiffCalculator() {
         const hours = differenceInHours(d2, dateAfterDays)
 
         setDiffParts({ years, months, days, hours })
-    }, [startDate, endDate])
+    }, [startDate, endDate, t])
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -91,22 +93,22 @@ export function DateDiffCalculator() {
     }
 
     const displayParts = [
-        diffParts.years > 0 ? `${diffParts.years} Years` : null,
-        diffParts.months > 0 ? `${diffParts.months} Months` : null,
-        diffParts.days > 0 ? `${diffParts.days} Days` : null,
-        diffParts.hours > 0 ? `${diffParts.hours} Hours` : null,
-    ].filter(Boolean).join(', ') || 'Identical'
+        diffParts.years > 0 ? `${diffParts.years} ${t('dates.years')}` : null,
+        diffParts.months > 0 ? `${diffParts.months} ${t('dates.months')}` : null,
+        diffParts.days > 0 ? `${diffParts.days} ${t('dates.days')}` : null,
+        diffParts.hours > 0 ? `${diffParts.hours} ${t('dates.hours')}` : null,
+    ].filter(Boolean).join(', ') || t('dates.identical')
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Date Difference</CardTitle>
-                    <CardDescription>Calculate the exact distance between two dates</CardDescription>
+                    <CardTitle>{t('dates.dateDifference')}</CardTitle>
+                    <CardDescription>{t('dates.dateDifferenceDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="start-date">Start Date & Time</Label>
+                        <Label htmlFor="start-date">{t('dates.startDateTime')}</Label>
                         <Input
                             id="start-date"
                             type="datetime-local"
@@ -116,7 +118,7 @@ export function DateDiffCalculator() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="end-date">End Date & Time</Label>
+                        <Label htmlFor="end-date">{t('dates.endDateTime')}</Label>
                         <Input
                             id="end-date"
                             type="datetime-local"
@@ -129,8 +131,8 @@ export function DateDiffCalculator() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Results</CardTitle>
-                    <CardDescription>Difference breakdown</CardDescription>
+                    <CardTitle>{t('dates.results')}</CardTitle>
+                    <CardDescription>{t('dates.differenceBreakdown')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     {error ? (
@@ -139,7 +141,7 @@ export function DateDiffCalculator() {
                         <>
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <Label className="text-sm font-semibold">Detailed Difference</Label>
+                                    <Label className="text-sm font-semibold">{t('dates.detailedDifference')}</Label>
                                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(displayParts)}>
                                         <Copy className="h-3 w-3" />
                                     </Button>
@@ -149,12 +151,12 @@ export function DateDiffCalculator() {
 
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <Label className="text-sm font-semibold">Total Days</Label>
-                                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(`Total: ${totalDays} days`)}>
+                                    <Label className="text-sm font-semibold">{t('dates.totalDays')}</Label>
+                                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(t('dates.totalDaysLabel', { n: totalDays! }))}>
                                         <Copy className="h-3 w-3" />
                                     </Button>
                                 </div>
-                                <div className="p-3 bg-secondary rounded-md text-lg font-bold">Total: {totalDays} days</div>
+                                <div className="p-3 bg-secondary rounded-md text-lg font-bold">{t('dates.totalDaysLabel', { n: totalDays! })}</div>
                             </div>
                         </>
                     )}

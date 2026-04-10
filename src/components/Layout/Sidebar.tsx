@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { Wrench, Github } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/i18n/LanguageContext'
 import {
   Tooltip,
   TooltipContent,
@@ -37,16 +38,16 @@ const textEnter = { duration: 0.15, ease: 'easeOut' as const, delay: 0.18 }
 const textExit = { duration: 0.1, ease: 'easeOut' as const }
 
 const menuItems = [
-  { text: 'JSON Toolkit', path: '/json', animatedIcon: 'chevrons' as const },
-  { text: 'Validators', path: '/validators', animatedIcon: 'checkSquare' as const },
-  { text: 'Data Generator', path: '/generator', animatedIcon: 'users' as const },
-  { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
-  { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
-  { text: 'Crypto Toolkit', path: '/crypto', animatedIcon: 'keyRound' as const },
-  { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
-  { text: 'SQL Tools', path: '/sql', animatedIcon: 'database' as const },
-  { text: 'Date & Time Tools', path: '/dates', animatedIcon: 'calendar' as const },
-  { text: 'Regex Tools', path: '/regex', animatedIcon: 'regex' as const },
+  { key: 'nav.jsonToolkit' as const, path: '/json', animatedIcon: 'chevrons' as const },
+  { key: 'nav.validators' as const, path: '/validators', animatedIcon: 'checkSquare' as const },
+  { key: 'nav.dataGenerator' as const, path: '/generator', animatedIcon: 'users' as const },
+  { key: 'nav.textComparator' as const, path: '/diff', animatedIcon: 'gitCompare' as const },
+  { key: 'nav.bcryptGenerator' as const, path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
+  { key: 'nav.cryptoToolkit' as const, path: '/crypto', animatedIcon: 'keyRound' as const },
+  { key: 'nav.markdownPreview' as const, path: '/markdown', animatedIcon: 'markdown' as const },
+  { key: 'nav.sqlTools' as const, path: '/sql', animatedIcon: 'database' as const },
+  { key: 'nav.dateTimeTools' as const, path: '/dates', animatedIcon: 'calendar' as const },
+  { key: 'nav.regexTools' as const, path: '/regex', animatedIcon: 'regex' as const },
 ] as const
 
 interface SidebarProps {
@@ -58,6 +59,7 @@ interface SidebarProps {
 export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps) {
   const navigate = useNavigate()
   const location = useLocation()
+  const { t } = useLanguage()
 
   const chevronsIconRef = useRef<ChevronsLeftRightIconHandle>(null)
   const checkSquareIconRef = useRef<CircleCheckIconHandle>(null)
@@ -106,6 +108,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path
             const animatedType = 'animatedIcon' in item ? item.animatedIcon : null
+            const itemText = t(item.key)
 
             const handleMouseEnter = () => {
               if (animatedType === 'chevrons') chevronsIconRef.current?.startAnimation()
@@ -133,7 +136,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
             }
 
             return (
-              <Tooltip key={item.text}>
+              <Tooltip key={item.key}>
                 <TooltipTrigger asChild>
                   <button
                     type="button"
@@ -219,13 +222,13 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                         transition: isCollapsed ? textExit : textEnter,
                       }}
                     >
-                      {item.text}
+                      {itemText}
                     </motion.span>
                   </button>
                 </TooltipTrigger>
                 {isCollapsed && (
                   <TooltipContent side="right" sideOffset={8}>
-                    {item.text}
+                    {itemText}
                   </TooltipContent>
                 )}
               </Tooltip>
@@ -240,7 +243,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-                aria-label="GitHub Repository"
+                aria-label={t('nav.githubRepository')}
               >
                 <Github className="shrink-0 size-4" />
                 <motion.span
@@ -252,13 +255,13 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                     transition: isCollapsed ? textExit : textEnter,
                   }}
                 >
-                  GitHub Repository
+                  {t('nav.githubRepository')}
                 </motion.span>
               </a>
             </TooltipTrigger>
             {isCollapsed && (
               <TooltipContent side="right" sideOffset={8}>
-                GitHub Repository
+                {t('nav.githubRepository')}
               </TooltipContent>
             )}
           </Tooltip>

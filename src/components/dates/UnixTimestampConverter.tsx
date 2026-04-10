@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Copy, RefreshCw } from 'lucide-react'
 import { format, fromUnixTime, getUnixTime, isValid } from 'date-fns'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function UnixTimestampConverter() {
+    const { t } = useLanguage()
     const [timestamp, setTimestamp] = useState<string>('')
     const [dateInput, setDateInput] = useState<string>('')
 
@@ -15,16 +17,10 @@ export function UnixTimestampConverter() {
     const [utcOutput, setUtcOutput] = useState<string>('-')
     const [localOutput, setLocalOutput] = useState<string>('-')
 
-    // Initialization
-    useEffect(() => {
-        const now = new Date()
-        const currentTs = getUnixTime(now).toString()
-        setTimestamp(currentTs)
-        setDateInput(format(now, "yyyy-MM-dd'T'HH:mm"))
-        updateOutputsFromTimestamp(currentTs)
-    }, [])
+    // Dependencies are needed for updateOutputsFromTimestamp
+    // We define it beforehand since it's used in the useEffect
 
-    const updateOutputsFromTimestamp = (val: string) => {
+    const updateOutputsFromTimestamp = useCallback((val: string) => {
         try {
             if (!val) {
                 setIsoOutput('-')
@@ -48,11 +44,20 @@ export function UnixTimestampConverter() {
             // Update reverse input if user is driving from the timestamp side
             setDateInput(format(dateObj, "yyyy-MM-dd'T'HH:mm:ss"))
         } catch {
-            setIsoOutput('Invalid or out of range')
-            setUtcOutput('Invalid or out of range')
-            setLocalOutput('Invalid or out of range')
+            setIsoOutput(t('dates.invalidOrOutOfRange'))
+            setUtcOutput(t('dates.invalidOrOutOfRange'))
+            setLocalOutput(t('dates.invalidOrOutOfRange'))
         }
-    }
+    }, [t])
+
+    // Initialization
+    useEffect(() => {
+        const now = new Date()
+        const currentTs = getUnixTime(now).toString()
+        setTimestamp(currentTs)
+        setDateInput(format(now, "yyyy-MM-dd'T'HH:mm"))
+        updateOutputsFromTimestamp(currentTs)
+    }, [updateOutputsFromTimestamp])
 
     const handleTimestampChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
@@ -100,12 +105,12 @@ export function UnixTimestampConverter() {
         <div className="grid gap-6 md:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Unix Timestamp to Date</CardTitle>
-                    <CardDescription>Convert seconds or milliseconds to human-readable dates</CardDescription>
+                    <CardTitle>{t('dates.unixToDate')}</CardTitle>
+                    <CardDescription>{t('dates.unixToDateDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="timestamp">Enter Timestamp</Label>
+                        <Label htmlFor="timestamp">{t('dates.enterTimestamp')}</Label>
                         <div className="flex space-x-2">
                             <Input
                                 id="timestamp"
@@ -113,7 +118,7 @@ export function UnixTimestampConverter() {
                                 value={timestamp}
                                 onChange={handleTimestampChange}
                             />
-                            <Button variant="outline" size="icon" onClick={setToNow} title="Current Time">
+                            <Button variant="outline" size="icon" onClick={setToNow} title={t('dates.currentTime')}>
                                 <RefreshCw className="h-4 w-4" />
                             </Button>
                         </div>
@@ -122,7 +127,7 @@ export function UnixTimestampConverter() {
                     <div className="space-y-3 pt-4 border-t">
                         <div className="space-y-1">
                             <div className="flex justify-between items-center">
-                                <Label className="text-xs text-muted-foreground">ISO 8601</Label>
+                                <Label className="text-xs text-muted-foreground">{t('dates.isoLabel')}</Label>
                                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(isoOutput)}>
                                     <Copy className="h-3 w-3" />
                                 </Button>
@@ -132,7 +137,7 @@ export function UnixTimestampConverter() {
 
                         <div className="space-y-1">
                             <div className="flex justify-between items-center">
-                                <Label className="text-xs text-muted-foreground">UTC Time</Label>
+                                <Label className="text-xs text-muted-foreground">{t('dates.utcTime')}</Label>
                                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(utcOutput)}>
                                     <Copy className="h-3 w-3" />
                                 </Button>
@@ -142,7 +147,7 @@ export function UnixTimestampConverter() {
 
                         <div className="space-y-1">
                             <div className="flex justify-between items-center">
-                                <Label className="text-xs text-muted-foreground">Local Time</Label>
+                                <Label className="text-xs text-muted-foreground">{t('dates.localTime')}</Label>
                                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(localOutput)}>
                                     <Copy className="h-3 w-3" />
                                 </Button>
@@ -155,12 +160,12 @@ export function UnixTimestampConverter() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Date to Unix Timestamp</CardTitle>
-                    <CardDescription>Convert a calendar date back to a timestamp</CardDescription>
+                    <CardTitle>{t('dates.dateToUnix')}</CardTitle>
+                    <CardDescription>{t('dates.dateToUnixDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="dateInput">Select Date & Time</Label>
+                        <Label htmlFor="dateInput">{t('dates.selectDateTime')}</Label>
                         <Input
                             id="dateInput"
                             type="datetime-local"
@@ -173,7 +178,7 @@ export function UnixTimestampConverter() {
                     <div className="space-y-3 pt-4 border-t">
                         <div className="space-y-1">
                             <div className="flex justify-between items-center">
-                                <Label className="text-xs text-muted-foreground">Unix Timestamp (Seconds)</Label>
+                                <Label className="text-xs text-muted-foreground">{t('dates.unixTimestampSeconds')}</Label>
                                 <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(timestamp)}>
                                     <Copy className="h-3 w-3" />
                                 </Button>

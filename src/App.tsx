@@ -10,8 +10,11 @@ import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
 import { DatesToolkit } from '@/pages/DatesToolkit'
 import { RegexTools } from '@/pages/RegexTools'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 function App() {
+  const { t } = useLanguage()
+
   return (
     <Router>
       <Routes>
@@ -19,7 +22,7 @@ function App() {
         <Route
           path="/json"
           element={
-            <MainLayout title="JSON Toolkit" fullWidth>
+            <MainLayout title={t('nav.jsonToolkit')} fullWidth>
               <JsonToolkit />
             </MainLayout>
           }
@@ -27,7 +30,7 @@ function App() {
         <Route
           path="/validators"
           element={
-            <MainLayout title="Validators">
+            <MainLayout title={t('nav.validators')}>
               <Validators />
             </MainLayout>
           }
@@ -35,7 +38,7 @@ function App() {
         <Route
           path="/generator"
           element={
-            <MainLayout title="Data Generator">
+            <MainLayout title={t('nav.dataGenerator')}>
               <DataGenerator />
             </MainLayout>
           }
@@ -43,7 +46,7 @@ function App() {
         <Route
           path="/diff"
           element={
-            <MainLayout title="Text Comparator" fullWidth>
+            <MainLayout title={t('nav.textComparator')} fullWidth>
               <TextComparator />
             </MainLayout>
           }
@@ -51,7 +54,7 @@ function App() {
         <Route
           path="/bcrypt"
           element={
-            <MainLayout title="Bcrypt Generator">
+            <MainLayout title={t('nav.bcryptGenerator')}>
               <BcryptGenerator />
             </MainLayout>
           }
@@ -59,7 +62,7 @@ function App() {
         <Route
           path="/crypto"
           element={
-            <MainLayout title="Crypto Toolkit">
+            <MainLayout title={t('nav.cryptoToolkit')}>
               <CryptoToolkit />
             </MainLayout>
           }
@@ -67,7 +70,7 @@ function App() {
         <Route
           path="/markdown"
           element={
-            <MainLayout title="Markdown Preview" fullWidth>
+            <MainLayout title={t('nav.markdownPreview')} fullWidth>
               <MarkdownPreview />
             </MainLayout>
           }
@@ -75,7 +78,7 @@ function App() {
         <Route
           path="/sql"
           element={
-            <MainLayout title="SQL Tools" fullWidth>
+            <MainLayout title={t('nav.sqlTools')} fullWidth>
               <SqlTools />
             </MainLayout>
           }
@@ -83,7 +86,7 @@ function App() {
         <Route
           path="/dates"
           element={
-            <MainLayout title="Date & Time Tools">
+            <MainLayout title={t('nav.dateTimeTools')}>
               <DatesToolkit />
             </MainLayout>
           }
@@ -91,7 +94,7 @@ function App() {
         <Route
           path="/regex"
           element={
-            <MainLayout title="Regex Tools" fullWidth>
+            <MainLayout title={t('nav.regexTools')} fullWidth>
               <RegexTools />
             </MainLayout>
           }

@@ -5,8 +5,10 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Copy, CheckCircle2, XCircle } from 'lucide-react'
 import { parseISO, isValid, format } from 'date-fns'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function IsoValidator() {
+    const { t } = useLanguage()
     const [inputString, setInputString] = useState<string>('')
 
     // Validation State
@@ -61,12 +63,12 @@ export function IsoValidator() {
         <div className="grid gap-6 md:grid-cols-2">
             <Card className="md:col-span-2">
                 <CardHeader>
-                    <CardTitle>ISO 8601 Validator</CardTitle>
-                    <CardDescription>Validate ISO or RFC 3339 datetime strings instantly</CardDescription>
+                    <CardTitle>{t('dates.isoValidator')}</CardTitle>
+                    <CardDescription>{t('dates.isoValidatorDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="iso-input">Date String</Label>
+                        <Label htmlFor="iso-input">{t('dates.dateString')}</Label>
                         <div className="relative">
                             <Input
                                 id="iso-input"
@@ -82,9 +84,9 @@ export function IsoValidator() {
                         </div>
 
                         <div className="pt-1 text-sm">
-                            {isValidIso === true && <span className="text-green-600 dark:text-green-500 font-medium">Valid ISO 8601 Formatted String</span>}
-                            {isValidIso === false && <span className="text-destructive font-medium">Invalid ISO string format</span>}
-                            {isValidIso === null && <span className="text-muted-foreground">Type a string to validate</span>}
+                            {isValidIso === true && <span className="text-green-600 dark:text-green-500 font-medium">{t('dates.validIso')}</span>}
+                            {isValidIso === false && <span className="text-destructive font-medium">{t('dates.invalidIso')}</span>}
+                            {isValidIso === null && <span className="text-muted-foreground">{t('dates.typeToValidate')}</span>}
                         </div>
                     </div>
                 </CardContent>
@@ -93,8 +95,8 @@ export function IsoValidator() {
             {isValidIso && parsedDate && (
                 <Card className="md:col-span-2">
                     <CardHeader>
-                        <CardTitle>Common Formats</CardTitle>
-                        <CardDescription>The validated date formatted in standard patterns (Local Time)</CardDescription>
+                        <CardTitle>{t('dates.commonFormats')}</CardTitle>
+                        <CardDescription>{t('dates.commonFormatsDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -103,8 +105,8 @@ export function IsoValidator() {
                                 { label: 'YYYY-MM-DD HH:mm:ss', pattern: 'yyyy-MM-dd HH:mm:ss' },
                                 { label: 'DD/MM/YYYY', pattern: 'dd/MM/yyyy' },
                                 { label: 'MM/DD/YYYY', pattern: 'MM/dd/yyyy' },
-                                { label: 'Human Readable', pattern: 'PPpp' }, // e.g. Apr 29, 1453, 12:00 AM
-                                { label: 'Unix Timestamp', pattern: 't' }, // Timestamp ms
+                                { label: t('dates.humanReadable'), pattern: 'PPpp' }, // e.g. Apr 29, 1453, 12:00 AM
+                                { label: t('dates.unixTimestamp'), pattern: 't' }, // Timestamp ms
                             ].map(fmt => {
                                 const formatted = format(parsedDate, fmt.pattern)
                                 return (

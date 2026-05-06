@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 import { Textarea } from '@/components/ui/textarea'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useLanguage } from '@/i18n/LanguageContext'
 import { Wand2, Trash2 } from 'lucide-react'
 import { CopyButton } from '@/components/Common/CopyButton'
 
 const defaultSQL = `select u.id, u.name, u.email, o.order_date, o.total from users u inner join orders o on u.id = o.user_id where o.status = 'completed' order by o.order_date desc;`
 
 export function SqlTools() {
+  const { t } = useLanguage()
   const [inputSQL, setInputSQL] = useLocalStorage('sql-input', defaultSQL)
   const [formattedSQL, setFormattedSQL] = useState('')
   const [error, setError] = useState('')
@@ -29,7 +31,7 @@ export function SqlTools() {
       })
       setFormattedSQL(formatted)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error formatting SQL')
+      setError(err instanceof Error ? err.message : t('sql.errorFormatting'))
       setFormattedSQL('')
     }
   }
@@ -42,22 +44,22 @@ export function SqlTools() {
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
-      <PageTitle description="Format and beautify SQL queries with proper indentation and syntax.">SQL Tools</PageTitle>
+      <PageTitle description={t('sql.description')}>{t('sql.title')}</PageTitle>
 
       <div className="flex flex-1 gap-6 overflow-hidden">
         {/* Input */}
         <div className="flex w-1/2 flex-col gap-3 overflow-hidden">
           <div className="flex flex-row flex-wrap items-center justify-between gap-2">
-            <h3 className="text-base font-semibold text-foreground">SQL Input</h3>
+            <h3 className="text-base font-semibold text-foreground">{t('sql.inputTitle')}</h3>
             <ButtonGroup aria-label="SQL actions">
               <Button variant="outline" size="sm" onClick={handleFormat} className="gap-2">
                 <Wand2 className="size-4" />
-                Format
+                {t('sql.format')}
               </Button>
               <ButtonGroupSeparator />
               <Button variant="destructive" size="sm" onClick={handleClear} className="gap-2">
                 <Trash2 className="size-4" />
-                Clear
+                {t('common.clear')}
               </Button>
             </ButtonGroup>
           </div>
@@ -65,7 +67,7 @@ export function SqlTools() {
           <Textarea
             value={inputSQL}
             onChange={(e) => setInputSQL(e.target.value)}
-            placeholder="Paste your SQL here to format..."
+            placeholder={t('sql.placeholder')}
             className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
           />
 
@@ -79,7 +81,7 @@ export function SqlTools() {
         {/* Output */}
         <div className="flex w-1/2 flex-col overflow-hidden rounded-lg border border-border bg-muted/40">
           <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-2.5">
-            <span className="text-sm font-medium text-muted-foreground">Formatted SQL</span>
+            <span className="text-sm font-medium text-muted-foreground">{t('sql.formattedTitle')}</span>
             {formattedSQL && <CopyButton text={formattedSQL} />}
           </div>
 
@@ -105,8 +107,8 @@ export function SqlTools() {
               <div className="flex size-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
                 <div>
                   <Wand2 className="mx-auto mb-3 size-12 opacity-20" />
-                  <p>Paste your SQL and click "Format"</p>
-                  <p className="mt-1 text-xs">The formatted output will appear here</p>
+                  <p>{t('sql.emptyStateTitle')}</p>
+                  <p className="mt-1 text-xs">{t('sql.emptyStateHint')}</p>
                 </div>
               </div>
             )}

@@ -7,8 +7,10 @@ import { Copy, ArrowRight } from 'lucide-react'
 import { format } from 'date-fns'
 import { formatInTimeZone, toDate } from 'date-fns-tz'
 import { timezones } from '@/lib/timezones'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function TimezoneConverter() {
+    const { t } = useLanguage()
     const [sourceDate, setSourceDate] = useState<string>('')
 
     // Timezones
@@ -43,10 +45,10 @@ export function TimezoneConverter() {
             setConvertedDate(resultStr)
             setConvertedIso(resultIso)
         } catch {
-            setConvertedDate('Invalid conversion')
+            setConvertedDate(t('dates.invalidConversion'))
             setConvertedIso('-')
         }
-    }, [sourceDate, sourceTz, targetTz])
+    }, [sourceDate, sourceTz, targetTz, t])
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -67,12 +69,12 @@ export function TimezoneConverter() {
         <div className="grid gap-6 md:grid-cols-2">
             <Card>
                 <CardHeader>
-                    <CardTitle>Timezone Converter</CardTitle>
-                    <CardDescription>Convert time instantly between different global regions</CardDescription>
+                    <CardTitle>{t('dates.timezoneConverter')}</CardTitle>
+                    <CardDescription>{t('dates.timezoneConverterDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="source-date">Date & Time</Label>
+                        <Label htmlFor="source-date">{t('dates.dateTime')}</Label>
                         <Input
                             id="source-date"
                             type="datetime-local"
@@ -83,7 +85,7 @@ export function TimezoneConverter() {
 
                     <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center pt-2">
                         <div className="space-y-2">
-                            <Label htmlFor="source-tz">From Timezone</Label>
+                            <Label htmlFor="source-tz">{t('dates.fromTimezone')}</Label>
                             <select
                                 id="source-tz"
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -99,7 +101,7 @@ export function TimezoneConverter() {
                         <ArrowRight className="h-5 w-5 mt-6 text-muted-foreground" />
 
                         <div className="space-y-2">
-                            <Label htmlFor="target-tz">To Timezone</Label>
+                            <Label htmlFor="target-tz">{t('dates.toTimezone')}</Label>
                             <select
                                 id="target-tz"
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -117,13 +119,13 @@ export function TimezoneConverter() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Result ({targetTz})</CardTitle>
-                    <CardDescription>The converted exact time in the destination timezone</CardDescription>
+                    <CardTitle>{t('dates.resultLabel', { tz: targetTz })}</CardTitle>
+                    <CardDescription>{t('dates.resultDesc')}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                            <Label className="text-sm font-semibold">Formatted Date</Label>
+                            <Label className="text-sm font-semibold">{t('dates.formattedDate')}</Label>
                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(convertedDate)}>
                                 <Copy className="h-3 w-3" />
                             </Button>
@@ -133,7 +135,7 @@ export function TimezoneConverter() {
 
                     <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                            <Label className="text-sm font-semibold">ISO 8601 representation</Label>
+                            <Label className="text-sm font-semibold">{t('dates.iso8601Repr')}</Label>
                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => copyToClipboard(convertedIso)}>
                                 <Copy className="h-3 w-3" />
                             </Button>

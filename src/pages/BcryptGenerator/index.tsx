@@ -6,8 +6,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import bcrypt from 'bcryptjs'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function BcryptGenerator() {
+  const { t } = useLanguage()
   // Generate Hash State
   const [textToHash, setTextToHash] = useState('')
   const [rounds, setRounds] = useState(12)
@@ -60,35 +62,35 @@ export function BcryptGenerator() {
   }
 
   const getRoundsDescription = (rounds: number) => {
-    if (rounds < 10) return 'Low security - for testing only'
-    if (rounds < 12) return 'Medium security'
-    if (rounds <= 14) return 'High security - suitable for production'
-    return 'Very high security - slow processing'
+    if (rounds < 10) return t('bcrypt.roundsLow')
+    if (rounds < 12) return t('bcrypt.roundsMedium')
+    if (rounds <= 14) return t('bcrypt.roundsHigh')
+    return t('bcrypt.roundsVeryHigh')
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <PageTitle description="Generate and verify bcrypt hashes. All processing happens in your browser for security.">
-        Bcrypt Hash Generator
+      <PageTitle description={t('bcrypt.description')}>
+        {t('bcrypt.title')}
       </PageTitle>
 
       {/* Generate Hash Card */}
       <Card className="p-6">
         <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Generate Hash</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t('bcrypt.generateHash')}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Generate a bcrypt hash from your text. Higher rounds provide better security but take longer to process.
+              {t('bcrypt.generateHashDesc')}
             </p>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="text-to-hash">Text to Hash</Label>
+              <Label htmlFor="text-to-hash">{t('bcrypt.textToHash')}</Label>
               <Input
                 id="text-to-hash"
                 type="password"
-                placeholder="Enter text to hash..."
+                placeholder={t('bcrypt.textPlaceholder')}
                 value={textToHash}
                 onChange={(e) => setTextToHash(e.target.value)}
               />
@@ -96,7 +98,7 @@ export function BcryptGenerator() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="rounds">Rounds (Cost Factor): {rounds}</Label>
+                <Label htmlFor="rounds">{t('bcrypt.roundsLabel', { rounds })}</Label>
                 <span className="text-xs text-muted-foreground">{getRoundsDescription(rounds)}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -135,12 +137,12 @@ export function BcryptGenerator() {
               disabled={!textToHash || isGenerating}
               className="w-full"
             >
-              {isGenerating ? 'Generating...' : 'Generate Hash'}
+              {isGenerating ? t('bcrypt.generating') : t('bcrypt.generateHash')}
             </Button>
 
             {generatedHash && (
               <div className="space-y-2">
-                <Label htmlFor="generated-hash">Generated Hash</Label>
+                <Label htmlFor="generated-hash">{t('bcrypt.generatedHash')}</Label>
                 <Textarea
                   id="generated-hash"
                   value={generatedHash}
@@ -158,18 +160,18 @@ export function BcryptGenerator() {
       <Card className="p-6">
         <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">Verify Hash</h2>
+            <h2 className="text-lg font-semibold text-foreground">{t('bcrypt.verifyHash')}</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Check if a bcrypt hash matches the original text.
+              {t('bcrypt.verifyHashDesc')}
             </p>
           </div>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="hash-to-verify">Bcrypt Hash</Label>
+              <Label htmlFor="hash-to-verify">{t('bcrypt.bcryptHash')}</Label>
               <Textarea
                 id="hash-to-verify"
-                placeholder="Enter bcrypt hash to verify..."
+                placeholder={t('bcrypt.hashPlaceholder')}
                 value={hashToVerify}
                 onChange={(e) => {
                   setHashToVerify(e.target.value)
@@ -181,11 +183,11 @@ export function BcryptGenerator() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="original-text">Original Text</Label>
+              <Label htmlFor="original-text">{t('bcrypt.originalText')}</Label>
               <Input
                 id="original-text"
                 type="password"
-                placeholder="Enter original text..."
+                placeholder={t('bcrypt.originalPlaceholder')}
                 value={originalText}
                 onChange={(e) => {
                   setOriginalText(e.target.value)
@@ -199,7 +201,7 @@ export function BcryptGenerator() {
               disabled={!hashToVerify || !originalText || isVerifying}
               className="w-full"
             >
-              {isVerifying ? 'Verifying...' : 'Verify Hash'}
+              {isVerifying ? t('bcrypt.verifying') : t('bcrypt.verifyHash')}
             </Button>
 
             {verificationResult !== null && (
@@ -215,7 +217,7 @@ export function BcryptGenerator() {
                     verificationResult ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                   }`}
                 >
-                  {verificationResult ? '✓ Hash matches the original text!' : '✗ Hash does not match the original text'}
+                  {verificationResult ? t('bcrypt.hashMatches') : t('bcrypt.hashNoMatch')}
                 </p>
               </div>
             )}
@@ -226,38 +228,34 @@ export function BcryptGenerator() {
       {/* FAQ Card */}
       <Card className="p-6">
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-foreground">FAQ</h2>
+          <h2 className="text-lg font-semibold text-foreground">{t('bcrypt.faq')}</h2>
 
           <div className="space-y-3">
             <div>
-              <h3 className="text-sm font-medium text-foreground">What is bcrypt?</h3>
+              <h3 className="text-sm font-medium text-foreground">{t('bcrypt.faqQ1')}</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Bcrypt is a password hashing function designed to be computationally intensive. It's commonly used for
-                securely storing passwords in databases.
+                {t('bcrypt.faqA1')}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-foreground">How many rounds should I use?</h3>
+              <h3 className="text-sm font-medium text-foreground">{t('bcrypt.faqQ2')}</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                12 rounds is the recommended minimum for production use. More rounds increase security but also
-                processing time. Choose based on your security requirements.
+                {t('bcrypt.faqA2')}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-foreground">Is this tool secure?</h3>
+              <h3 className="text-sm font-medium text-foreground">{t('bcrypt.faqQ3')}</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                All processing happens in your browser using the bcryptjs library. No data is sent to any servers or
-                stored anywhere.
+                {t('bcrypt.faqA3')}
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-medium text-foreground">Can I use this in production?</h3>
+              <h3 className="text-sm font-medium text-foreground">{t('bcrypt.faqQ4')}</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                This tool is primarily for testing and learning. For production use, implement bcrypt directly in your
-                application using a trusted library.
+                {t('bcrypt.faqA4')}
               </p>
             </div>
           </div>

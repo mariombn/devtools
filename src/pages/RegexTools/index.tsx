@@ -10,6 +10,7 @@ import { commonPatterns } from '@/utils/regex/commonPatterns'
 import type { RegexMatch } from '@/utils/regex/regexEngine'
 import { Regex, ChevronDown, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 const ALL_FLAGS = ['g', 'i', 'm', 's', 'u'] as const
 
@@ -38,6 +39,7 @@ function buildHighlightedSegments(text: string, matches: RegexMatch[]) {
 }
 
 export function RegexTools() {
+  const { t } = useLanguage()
   const [pattern, setPattern] = useLocalStorage('regex-pattern', '')
   const [testString, setTestString] = useLocalStorage('regex-test-string', '')
   const [flags, setFlags] = useLocalStorage('regex-flags', 'g')
@@ -89,8 +91,8 @@ export function RegexTools() {
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
-      <PageTitle description="Test and validate regular expressions with real-time match highlighting.">
-        Regex Tools
+      <PageTitle description={t('regex.description')}>
+        {t('regex.title')}
       </PageTitle>
 
       <div className="flex flex-1 gap-6 overflow-hidden">
@@ -99,7 +101,7 @@ export function RegexTools() {
           {/* Pattern input */}
           <div className="space-y-2">
             <div className="flex flex-row flex-wrap items-center justify-between gap-2">
-              <h3 className="text-base font-semibold text-foreground">Pattern</h3>
+              <h3 className="text-base font-semibold text-foreground">{t('regex.pattern')}</h3>
               <Button
                 variant="destructive"
                 size="sm"
@@ -107,7 +109,7 @@ export function RegexTools() {
                 className="gap-2"
               >
                 <Trash2 className="size-4" />
-                Clear
+                {t('common.clear')}
               </Button>
             </div>
             <div className="flex items-center gap-2">
@@ -115,7 +117,7 @@ export function RegexTools() {
               <Input
                 value={pattern}
                 onChange={(e) => setPattern(e.target.value)}
-                placeholder="Enter regex pattern..."
+                placeholder={t('regex.patternPlaceholder')}
                 className="flex-1 font-mono text-sm"
               />
               <span className="text-muted-foreground font-mono text-sm">/</span>
@@ -153,7 +155,7 @@ export function RegexTools() {
               <ChevronDown
                 className={cn('size-4 transition-transform', showPatterns && 'rotate-180')}
               />
-              Common Patterns
+              {t('regex.commonPatterns')}
             </Button>
             {showPatterns && (
               <div className="absolute left-0 top-full z-10 mt-1 max-h-64 w-80 overflow-auto rounded-lg border border-border bg-card p-1 shadow-lg">
@@ -174,11 +176,11 @@ export function RegexTools() {
 
           {/* Test string */}
           <div className="flex flex-1 flex-col gap-2 overflow-hidden">
-            <h3 className="text-base font-semibold text-foreground">Test String</h3>
+            <h3 className="text-base font-semibold text-foreground">{t('regex.testString')}</h3>
             <Textarea
               value={testString}
               onChange={(e) => setTestString(e.target.value)}
-              placeholder="Enter text to test against the pattern..."
+              placeholder={t('regex.testStringPlaceholder')}
               className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
             />
           </div>
@@ -188,10 +190,10 @@ export function RegexTools() {
         <div className="flex w-1/2 flex-col overflow-hidden rounded-lg border border-border bg-muted/40">
           <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">Match Results</span>
+              <span className="text-sm font-medium text-muted-foreground">{t('regex.matchResults')}</span>
               {result.matches.length > 0 && (
                 <span className="rounded-full bg-secondary px-2 py-0.5 text-xs font-medium text-foreground">
-                  {result.matches.length} match{result.matches.length !== 1 && 'es'}
+                  {result.matches.length} {result.matches.length === 1 ? t('regex.matches') : t('regex.matchesPlural')}
                 </span>
               )}
             </div>
@@ -204,7 +206,7 @@ export function RegexTools() {
                 {/* Highlighted text */}
                 <div className="p-4">
                   <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                    Highlighted Matches
+                    {t('regex.highlightedMatches')}
                   </h4>
                   <pre className="whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-foreground">
                     {segments.map((seg, i) =>
@@ -226,7 +228,7 @@ export function RegexTools() {
                 {result.matches.length > 0 && (
                   <div className="p-4">
                     <h4 className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      Match Details
+                      {t('regex.matchDetails')}
                     </h4>
                     <div className="space-y-2">
                       {result.matches.map((match, i) => (
@@ -247,7 +249,7 @@ export function RegexTools() {
                           </code>
                           {match.captures.length > 0 && (
                             <div className="mt-2 space-y-1">
-                              <span className="text-xs text-muted-foreground">Groups:</span>
+                              <span className="text-xs text-muted-foreground">{t('regex.groups')}:</span>
                               {match.captures.map((cap, j) => (
                                 <div key={j} className="ml-2 font-mono text-xs text-muted-foreground">
                                   ${j + 1}: "{cap ?? ''}"
@@ -257,7 +259,7 @@ export function RegexTools() {
                           )}
                           {Object.keys(match.groups).length > 0 && (
                             <div className="mt-2 space-y-1">
-                              <span className="text-xs text-muted-foreground">Named Groups:</span>
+                              <span className="text-xs text-muted-foreground">{t('regex.namedGroups')}:</span>
                               {Object.entries(match.groups).map(([name, val]) => (
                                 <div key={name} className="ml-2 font-mono text-xs text-muted-foreground">
                                   {name}: "{val ?? ''}"
@@ -275,8 +277,8 @@ export function RegexTools() {
               <div className="flex size-full items-center justify-center p-8 text-center text-sm text-muted-foreground">
                 <div>
                   <Regex className="mx-auto mb-3 size-12 opacity-20" />
-                  <p>Enter a pattern and test string</p>
-                  <p className="mt-1 text-xs">Matches will be highlighted in real time</p>
+                  <p>{t('regex.emptyState')}</p>
+                  <p className="mt-1 text-xs">{t('regex.emptyStateHint')}</p>
                 </div>
               </div>
             )}

@@ -10,8 +10,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { validateJson, prettifyJson, minifyJson } from '@/utils/formatters/jsonFormatter'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function JsonToolkit() {
+  const { t } = useLanguage()
   const [input, setInput] = useLocalStorage('json-input', '')
   const [output, setOutput] = useState('')
   const [error, setError] = useState('')
@@ -28,9 +30,9 @@ export function JsonToolkit() {
     if (result.valid) {
       setError('')
       setOutput('')
-      setSuccess('✓ Valid JSON')
+      setSuccess(t('json.validJson'))
     } else {
-      setError(result.error ?? 'Invalid JSON')
+      setError(result.error ?? t('json.invalidJson'))
       setOutput('')
       setSuccess('')
     }
@@ -43,7 +45,7 @@ export function JsonToolkit() {
       setError('')
       setSuccess('')
     } catch {
-      setError('Invalid JSON - cannot prettify')
+      setError(t('json.cannotPrettify'))
       setOutput('')
       setSuccess('')
     }
@@ -56,7 +58,7 @@ export function JsonToolkit() {
       setError('')
       setSuccess('')
     } catch {
-      setError('Invalid JSON - cannot minify')
+      setError(t('json.cannotMinify'))
       setOutput('')
       setSuccess('')
     }
@@ -71,25 +73,25 @@ export function JsonToolkit() {
 
   return (
     <>
-      <PageTitle description="Validate, format, and minify JSON with a single click.">JSON Toolkit</PageTitle>
+      <PageTitle description={t('json.description')}>{t('json.title')}</PageTitle>
 
       <div className="space-y-6">
         <div className="space-y-2">
             <div className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
-              <h2 className="text-lg font-semibold text-foreground">Input</h2>
+              <h2 className="text-lg font-semibold text-foreground">{t('common.input')}</h2>
               <ButtonGroup aria-label="JSON actions">
                 <Button variant="outline" size="sm" onClick={handleValidate}>
-                  Validate
+                  {t('json.validate')}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handlePrettify}>
-                  Prettify
+                  {t('json.prettify')}
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleMinify}>
-                  Minify
+                  {t('json.minify')}
                 </Button>
                 <ButtonGroupSeparator />
                 <Button variant="destructive" size="sm" onClick={handleClear}>
-                  Clear
+                  {t('common.clear')}
                 </Button>
               </ButtonGroup>
             </div>
@@ -101,7 +103,7 @@ export function JsonToolkit() {
                 )}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder='Paste or type JSON here... e.g., {"name": "John", "age": 30}'
+                placeholder={t('json.placeholder')}
               />
               {hasContent && inputValidation !== null && (
                 <span
@@ -111,8 +113,8 @@ export function JsonToolkit() {
                       ? 'bg-success/10 text-success'
                       : 'bg-destructive/15 text-destructive'
                   )}
-                  title={inputValidation.valid ? 'JSON válido' : inputValidation.error}
-                  aria-label={inputValidation.valid ? 'JSON válido' : 'JSON inválido'}
+                  title={inputValidation.valid ? t('json.validJson') : inputValidation.error}
+                  aria-label={inputValidation.valid ? t('json.validJson') : t('json.invalidJson')}
                 >
                   {inputValidation.valid ? (
                     <CheckCircle className="h-4 w-4" />
@@ -129,7 +131,7 @@ export function JsonToolkit() {
             <AlertDescription>{error}</AlertDescription>
             <Button
               variant="ghost"
-              aria-label="Fechar"
+              aria-label={t('common.close')}
               className="hover:bg-destructive/10 hover:text-destructive"
               onClick={() => setError('')}
             >
@@ -143,7 +145,7 @@ export function JsonToolkit() {
             <AlertDescription>{success}</AlertDescription>
             <Button
               variant="ghost"
-              aria-label="Fechar"
+              aria-label={t('common.close')}
               className="hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-400"
               onClick={() => setSuccess('')}
             >
@@ -155,7 +157,7 @@ export function JsonToolkit() {
         {output && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h2 className="text-base font-semibold text-foreground">Output</h2>
+              <h2 className="text-base font-semibold text-foreground">{t('common.output')}</h2>
               <CopyButton text={output} size="icon" />
             </CardHeader>
             <CardContent>

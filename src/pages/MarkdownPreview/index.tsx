@@ -5,6 +5,7 @@ import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { PageTitle } from '@/components/Common/PageTitle'
 import { Textarea } from '@/components/ui/textarea'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 const defaultMarkdown = `# Markdown Preview
 
@@ -61,21 +62,22 @@ function hello(name) {
 `
 
 export function MarkdownPreview() {
+  const { t } = useLanguage()
   const [markdown, setMarkdown] = useLocalStorage('markdown-input', defaultMarkdown)
   const isDark = document.documentElement.classList.contains('dark')
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
-      <PageTitle description="Write Markdown and see it rendered in real time.">Markdown Preview</PageTitle>
+      <PageTitle description={t('markdown.description')}>{t('markdown.title')}</PageTitle>
       
       <div className="flex flex-1 gap-6 overflow-hidden">
         {/* Editor */}
         <div className="flex w-1/2 flex-col gap-3 overflow-hidden">
-          <h3 className="text-base font-semibold text-foreground">Editor</h3>
+          <h3 className="text-base font-semibold text-foreground">{t('markdown.editorTitle')}</h3>
           <Textarea
             value={markdown}
             onChange={(e) => setMarkdown(e.target.value)}
-            placeholder="Digite seu markdown aqui..."
+            placeholder={t('markdown.placeholder')}
             className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
           />
         </div>
@@ -83,7 +85,7 @@ export function MarkdownPreview() {
         {/* Preview */}
         <div className="flex w-1/2 flex-col overflow-hidden rounded-lg border border-border bg-muted/40">
           <div className="flex shrink-0 items-center border-b border-border px-4 py-2.5">
-            <span className="text-sm font-medium text-muted-foreground">Preview</span>
+            <span className="text-sm font-medium text-muted-foreground">{t('markdown.previewTitle')}</span>
           </div>
           <div className="flex-1 overflow-auto px-8 pb-8 pt-4">
             <div className="markdown-preview">

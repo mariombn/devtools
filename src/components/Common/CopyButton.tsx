@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useClipboard } from '@/hooks/useClipboard'
 import { cn } from '@/lib/utils'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 interface CopyButtonProps {
   text: string
@@ -15,6 +16,7 @@ interface CopyButtonProps {
 }
 
 export function CopyButton({ text, size = 'icon' }: CopyButtonProps) {
+  const { t } = useLanguage()
   const { copy, copied } = useClipboard()
   const disabled = !text
 
@@ -23,10 +25,10 @@ export function CopyButton({ text, size = 'icon' }: CopyButtonProps) {
   }
 
   const label = disabled
-    ? 'Nada para copiar'
+    ? t('common.nothingToCopy')
     : copied
-      ? 'Copiado!'
-      : 'Copiar para a área de transferência'
+      ? t('common.copied')
+      : t('common.copy')
 
   return (
     <TooltipProvider delayDuration={300}>

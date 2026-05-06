@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { PageTitle } from '@/components/Common/PageTitle'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 // Helper: CPF Validation
 const validateCPF = (cpf: string): boolean => {
@@ -103,6 +104,7 @@ function ValidationIcon({ value, isValid }: { value: string; isValid: boolean })
 }
 
 export function Validators() {
+    const { t } = useLanguage()
     const [cpf, setCpf] = useState('')
     const [cnpj, setCnpj] = useState('')
     const [email, setEmail] = useState('')
@@ -117,8 +119,8 @@ export function Validators() {
 
     return (
         <div>
-            <PageTitle description="Quickly validate common formats and documents like CPF, CNPJ, Email, and Credit Cards.">
-                Data Validators
+            <PageTitle description={t('validators.description')}>
+                {t('validators.title')}
             </PageTitle>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -126,9 +128,9 @@ export function Validators() {
                 <Card className="p-6">
                     <div className="space-y-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-foreground">CPF Validator</h2>
+                            <h2 className="text-lg font-semibold text-foreground">{t('validators.cpfTitle')}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Assesses format and mathematically verifies CPF check digits.
+                                {t('validators.cpfDesc')}
                             </p>
                         </div>
                         <div className="space-y-2">
@@ -136,7 +138,7 @@ export function Validators() {
                                 <Input
                                     id="cpf-input"
                                     type="text"
-                                    placeholder="000.000.000-00 or numbers only"
+                                    placeholder={t('validators.cpfPlaceholder')}
                                     value={cpf}
                                     onChange={(e) => setCpf(e.target.value)}
                                     className={cn('pr-9', getValidationStyle(cpf, validateCPF(cpf)))}
@@ -153,9 +155,9 @@ export function Validators() {
                 <Card className="p-6">
                     <div className="space-y-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-foreground">CNPJ Validator</h2>
+                            <h2 className="text-lg font-semibold text-foreground">{t('validators.cnpjTitle')}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Assesses format and mathematically verifies CNPJ check digits.
+                                {t('validators.cnpjDesc')}
                             </p>
                         </div>
                         <div className="space-y-2">
@@ -163,7 +165,7 @@ export function Validators() {
                                 <Input
                                     id="cnpj-input"
                                     type="text"
-                                    placeholder="00.000.000/0000-00 or numbers only"
+                                    placeholder={t('validators.cnpjPlaceholder')}
                                     value={cnpj}
                                     onChange={(e) => setCnpj(e.target.value)}
                                     className={cn('pr-9', getValidationStyle(cnpj, validateCNPJ(cnpj)))}
@@ -180,9 +182,9 @@ export function Validators() {
                 <Card className="p-6">
                     <div className="space-y-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-foreground">Email Validator</h2>
+                            <h2 className="text-lg font-semibold text-foreground">{t('validators.emailTitle')}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Checks if the email string adheres to common email string layout.
+                                {t('validators.emailDesc')}
                             </p>
                         </div>
                         <div className="space-y-2">
@@ -190,7 +192,7 @@ export function Validators() {
                                 <Input
                                     id="email-input"
                                     type="email"
-                                    placeholder="example@domain.com"
+                                    placeholder={t('validators.emailPlaceholder')}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className={cn('pr-9', getValidationStyle(email, validateEmail(email)))}
@@ -207,9 +209,9 @@ export function Validators() {
                 <Card className="p-6">
                     <div className="space-y-4">
                         <div>
-                            <h2 className="text-lg font-semibold text-foreground">Credit Card Validator</h2>
+                            <h2 className="text-lg font-semibold text-foreground">{t('validators.creditCardTitle')}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Verifies credit card using the Luhn algorithm (modulus 10).
+                                {t('validators.creditCardDesc')}
                             </p>
                         </div>
                         <div className="space-y-2">
@@ -217,7 +219,7 @@ export function Validators() {
                                 <Input
                                     id="cc-input"
                                     type="text"
-                                    placeholder="0000 0000 0000 0000"
+                                    placeholder={t('validators.creditCardPlaceholder')}
                                     value={creditCard}
                                     onChange={(e) => setCreditCard(e.target.value)}
                                     className={cn('pr-9', getValidationStyle(creditCard, validateCreditCard(creditCard)))}

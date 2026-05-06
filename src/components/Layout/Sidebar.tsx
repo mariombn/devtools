@@ -27,6 +27,8 @@ import { CalendarDaysIcon } from '@/components/icons/CalendarDaysIcon'
 import type { CalendarDaysIconHandle } from '@/components/icons/CalendarDaysIcon'
 import { RegexIcon } from '@/components/icons/RegexIcon'
 import type { RegexIconHandle } from '@/components/icons/RegexIcon'
+import { KeyRoundIcon } from '@/components/icons/KeyRoundIcon'
+import type { KeyRoundIconHandle } from '@/components/icons/KeyRoundIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -40,6 +42,7 @@ const menuItems = [
   { text: 'Data Generator', path: '/generator', animatedIcon: 'users' as const },
   { text: 'Text Comparator', path: '/diff', animatedIcon: 'gitCompare' as const },
   { text: 'Bcrypt Generator', path: '/bcrypt', animatedIcon: 'shieldCheck' as const },
+  { text: 'Crypto Toolkit', path: '/crypto', animatedIcon: 'keyRound' as const },
   { text: 'Markdown Preview', path: '/markdown', animatedIcon: 'markdown' as const },
   { text: 'SQL Tools', path: '/sql', animatedIcon: 'database' as const },
   { text: 'Date & Time Tools', path: '/dates', animatedIcon: 'calendar' as const },
@@ -65,6 +68,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const databaseIconRef = useRef<LayersIconHandle>(null)
   const calendarIconRef = useRef<CalendarDaysIconHandle>(null)
   const regexIconRef = useRef<RegexIconHandle>(null)
+  const keyRoundIconRef = useRef<KeyRoundIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -113,6 +117,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'database') databaseIconRef.current?.startAnimation()
               if (animatedType === 'calendar') calendarIconRef.current?.startAnimation()
               if (animatedType === 'regex') regexIconRef.current?.startAnimation()
+              if (animatedType === 'keyRound') keyRoundIconRef.current?.startAnimation()
             }
             const handleMouseLeave = () => {
               if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
@@ -124,6 +129,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'database') databaseIconRef.current?.stopAnimation()
               if (animatedType === 'calendar') calendarIconRef.current?.stopAnimation()
               if (animatedType === 'regex') regexIconRef.current?.stopAnimation()
+              if (animatedType === 'keyRound') keyRoundIconRef.current?.stopAnimation()
             }
 
             return (
@@ -193,6 +199,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                     ) : animatedType === 'regex' ? (
                       <RegexIcon
                         ref={regexIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'keyRound' ? (
+                      <KeyRoundIcon
+                        ref={keyRoundIconRef}
                         size={18}
                         className="shrink-0 opacity-80"
                       />

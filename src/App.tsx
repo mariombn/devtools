@@ -4,6 +4,7 @@ import { JsonToolkit } from '@/pages/JsonToolkit'
 import { DataGenerator } from '@/pages/DataGenerator'
 import { TextComparator } from '@/pages/TextComparator'
 import { BcryptGenerator } from '@/pages/BcryptGenerator'
+import { CryptoToolkit } from '@/pages/CryptoToolkit'
 import { MarkdownPreview } from '@/pages/MarkdownPreview'
 import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
@@ -52,6 +53,14 @@ function App() {
           element={
             <MainLayout title="Bcrypt Generator">
               <BcryptGenerator />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/crypto"
+          element={
+            <MainLayout title="Crypto Toolkit">
+              <CryptoToolkit />
             </MainLayout>
           }
         />

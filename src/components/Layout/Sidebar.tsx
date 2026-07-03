@@ -30,6 +30,8 @@ import { RegexIcon } from '@/components/icons/RegexIcon'
 import type { RegexIconHandle } from '@/components/icons/RegexIcon'
 import { KeyRoundIcon } from '@/components/icons/KeyRoundIcon'
 import type { KeyRoundIconHandle } from '@/components/icons/KeyRoundIcon'
+import { ScaleIcon } from '@/components/icons/ScaleIcon'
+import type { ScaleIconHandle } from '@/components/icons/ScaleIcon'
 
 const drawerWidth = 260
 const collapsedWidth = 64
@@ -48,6 +50,7 @@ const menuItems = [
   { key: 'nav.sqlTools' as const, path: '/sql', animatedIcon: 'database' as const },
   { key: 'nav.dateTimeTools' as const, path: '/dates', animatedIcon: 'calendar' as const },
   { key: 'nav.regexTools' as const, path: '/regex', animatedIcon: 'regex' as const },
+  { key: 'nav.ruleOfThree' as const, path: '/rule-of-three', animatedIcon: 'scale' as const },
 ] as const
 
 interface SidebarProps {
@@ -71,6 +74,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
   const calendarIconRef = useRef<CalendarDaysIconHandle>(null)
   const regexIconRef = useRef<RegexIconHandle>(null)
   const keyRoundIconRef = useRef<KeyRoundIconHandle>(null)
+  const scaleIconRef = useRef<ScaleIconHandle>(null)
 
   const handleNavigation = (path: string) => {
     navigate(path)
@@ -121,6 +125,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'calendar') calendarIconRef.current?.startAnimation()
               if (animatedType === 'regex') regexIconRef.current?.startAnimation()
               if (animatedType === 'keyRound') keyRoundIconRef.current?.startAnimation()
+              if (animatedType === 'scale') scaleIconRef.current?.startAnimation()
             }
             const handleMouseLeave = () => {
               if (animatedType === 'chevrons') chevronsIconRef.current?.stopAnimation()
@@ -133,6 +138,7 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
               if (animatedType === 'calendar') calendarIconRef.current?.stopAnimation()
               if (animatedType === 'regex') regexIconRef.current?.stopAnimation()
               if (animatedType === 'keyRound') keyRoundIconRef.current?.stopAnimation()
+              if (animatedType === 'scale') scaleIconRef.current?.stopAnimation()
             }
 
             return (
@@ -208,6 +214,12 @@ export function Sidebar({ mobileOpen, onClose, collapsed = false }: SidebarProps
                     ) : animatedType === 'keyRound' ? (
                       <KeyRoundIcon
                         ref={keyRoundIconRef}
+                        size={18}
+                        className="shrink-0 opacity-80"
+                      />
+                    ) : animatedType === 'scale' ? (
+                      <ScaleIcon
+                        ref={scaleIconRef}
                         size={18}
                         className="shrink-0 opacity-80"
                       />

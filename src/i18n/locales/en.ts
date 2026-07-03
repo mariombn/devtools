@@ -10,6 +10,7 @@ export type Translations = {
     sqlTools: string
     dateTimeTools: string
     regexTools: string
+    ruleOfThree: string
     githubRepository: string
   }
   topbar: {
@@ -274,6 +275,28 @@ export type Translations = {
     previewTitle: string
     placeholder: string
   }
+  ruleOfThree: {
+    title: string
+    description: string
+    inputTitle: string
+    inputDesc: string
+    direct: string
+    inverse: string
+    directHint: string
+    inverseHint: string
+    valueA: string
+    valueB: string
+    valueC: string
+    justAs: string
+    unknown: string
+    resultTitle: string
+    resultDesc: string
+    valueOfX: string
+    calculation: string
+    emptyState: string
+    emptyStateHint: string
+    errorDivByZero: string
+  }
 }
 
 export const en: Translations = {
@@ -288,6 +311,7 @@ export const en: Translations = {
     sqlTools: 'SQL Tools',
     dateTimeTools: 'Date & Time Tools',
     regexTools: 'Regex Tools',
+    ruleOfThree: 'Rule of Three',
     githubRepository: 'GitHub Repository',
   },
   topbar: {
@@ -551,5 +575,27 @@ export const en: Translations = {
     editorTitle: 'Editor',
     previewTitle: 'Preview',
     placeholder: 'Type your markdown here...',
+  },
+  ruleOfThree: {
+    title: 'Rule of Three',
+    description: 'Solve a proportion — find the missing value X from three known values.',
+    inputTitle: 'Proportion',
+    inputDesc: 'Enter A, B and C. X is calculated automatically.',
+    direct: 'Direct',
+    inverse: 'Inverse',
+    directHint: 'Direct: when one value increases, the other increases too. X = (B × C) ÷ A.',
+    inverseHint: 'Inverse: when one value increases, the other decreases. X = (A × B) ÷ C.',
+    valueA: 'Value A',
+    valueB: 'Value B',
+    valueC: 'Value C',
+    justAs: 'just as',
+    unknown: 'X (unknown)',
+    resultTitle: 'Result',
+    resultDesc: 'The value of the unknown X',
+    valueOfX: 'Value of X',
+    calculation: 'Calculation',
+    emptyState: 'Enter A, B and C to calculate X',
+    emptyStateHint: 'X updates automatically as you type',
+    errorDivByZero: 'Cannot divide by zero — check your values.',
   },
 }

@@ -13,6 +13,7 @@ export const pt: Translations = {
     sqlTools: 'Ferramentas SQL',
     dateTimeTools: 'Datas & Horas',
     regexTools: 'Ferramentas Regex',
+    ruleOfThree: 'Regra de Três',
     githubRepository: 'Repositório GitHub',
   },
 
@@ -305,5 +306,29 @@ export const pt: Translations = {
     editorTitle: 'Editor',
     previewTitle: 'Visualização',
     placeholder: 'Digite seu markdown aqui...',
+  },
+
+  // ── Rule of Three ──────────────────────────────────────────────────────────
+  ruleOfThree: {
+    title: 'Regra de Três',
+    description: 'Resolva uma proporção — encontre o valor faltante X a partir de três valores conhecidos.',
+    inputTitle: 'Proporção',
+    inputDesc: 'Informe A, B e C. O X é calculado automaticamente.',
+    direct: 'Direta',
+    inverse: 'Inversa',
+    directHint: 'Direta: quando um valor aumenta, o outro também aumenta. X = (B × C) ÷ A.',
+    inverseHint: 'Inversa: quando um valor aumenta, o outro diminui. X = (A × B) ÷ C.',
+    valueA: 'Valor A',
+    valueB: 'Valor B',
+    valueC: 'Valor C',
+    justAs: 'assim como',
+    unknown: 'X (incógnita)',
+    resultTitle: 'Resultado',
+    resultDesc: 'O valor da incógnita X',
+    valueOfX: 'Valor de X',
+    calculation: 'Cálculo',
+    emptyState: 'Preencha A, B e C para calcular o X',
+    emptyStateHint: 'O X é atualizado automaticamente enquanto você digita',
+    errorDivByZero: 'Não é possível dividir por zero — verifique os valores.',
   },
 }

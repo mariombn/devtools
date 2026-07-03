@@ -10,6 +10,7 @@ import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
 import { DatesToolkit } from '@/pages/DatesToolkit'
 import { RegexTools } from '@/pages/RegexTools'
+import { RuleOfThree } from '@/pages/RuleOfThree'
 import { useLanguage } from '@/i18n/LanguageContext'
 
 function App() {
@@ -96,6 +97,14 @@ function App() {
           element={
             <MainLayout title={t('nav.regexTools')} fullWidth>
               <RegexTools />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/rule-of-three"
+          element={
+            <MainLayout title={t('nav.ruleOfThree')}>
+              <RuleOfThree />
             </MainLayout>
           }
         />

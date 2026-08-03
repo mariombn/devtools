@@ -45,8 +45,26 @@ export default defineConfig({
 			},
 			workbox: {
 				globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+				// Dynamically imported chunks (mermaid and its diagram renderers, ~3.3 MB)
+				// are cached on first use instead of being precached, so installing the
+				// PWA does not download the diagram engine for users who never open it.
+				globIgnores: ['**/assets/lazy/**'],
 				maximumFileSizeToCacheInBytes: 5000000,
 				runtimeCaching: [
+					{
+						urlPattern: /\/assets\/lazy\/.*\.js$/,
+						handler: 'CacheFirst',
+						options: {
+							cacheName: 'lazy-chunks-cache',
+							expiration: {
+								maxEntries: 120,
+								maxAgeSeconds: 60 * 60 * 24 * 365 // 1 ano
+							},
+							cacheableResponse: {
+								statuses: [0, 200]
+							}
+						}
+					},
 					{
 						urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
 						handler: 'CacheFirst',
@@ -65,6 +83,15 @@ export default defineConfig({
 			}
 		})
 	],
+	build: {
+		rollupOptions: {
+			output: {
+				// Route async chunks into their own folder so the service worker can
+				// tell lazy code apart from the initial bundle (see globIgnores above).
+				chunkFileNames: 'assets/lazy/[name]-[hash].js',
+			},
+		},
+	},
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, './src'),

@@ -7,6 +7,7 @@ export type Translations = {
     bcryptGenerator: string
     cryptoToolkit: string
     markdownPreview: string
+    mermaidDiagrams: string
     sqlTools: string
     dateTimeTools: string
     regexTools: string
@@ -275,6 +276,26 @@ export type Translations = {
     previewTitle: string
     placeholder: string
   }
+  mermaid: {
+    title: string
+    description: string
+    editorTitle: string
+    previewTitle: string
+    placeholder: string
+    examples: string
+    zoomIn: string
+    zoomOut: string
+    resetView: string
+    viewHint: string
+    exportScale: string
+    transparentBackground: string
+    downloadPng: string
+    downloadSvg: string
+    syntaxError: string
+    exportError: string
+    emptyState: string
+    emptyStateHint: string
+  }
   ruleOfThree: {
     title: string
     description: string
@@ -308,6 +329,7 @@ export const en: Translations = {
     bcryptGenerator: 'Bcrypt Generator',
     cryptoToolkit: 'Crypto Toolkit',
     markdownPreview: 'Markdown Preview',
+    mermaidDiagrams: 'Mermaid Diagrams',
     sqlTools: 'SQL Tools',
     dateTimeTools: 'Date & Time Tools',
     regexTools: 'Regex Tools',
@@ -575,6 +597,26 @@ export const en: Translations = {
     editorTitle: 'Editor',
     previewTitle: 'Preview',
     placeholder: 'Type your markdown here...',
+  },
+  mermaid: {
+    title: 'Mermaid Diagrams',
+    description: 'Write Mermaid syntax, preview the diagram live and export it as PNG or SVG.',
+    editorTitle: 'Diagram source',
+    previewTitle: 'Preview',
+    placeholder: 'Type your Mermaid diagram here...',
+    examples: 'Examples',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    resetView: 'Reset view',
+    viewHint: 'Drag to pan · scroll to move · Ctrl/⌘ + scroll to zoom',
+    exportScale: 'PNG scale',
+    transparentBackground: 'Transparent background',
+    downloadPng: 'PNG',
+    downloadSvg: 'SVG',
+    syntaxError: 'Invalid diagram syntax',
+    exportError: 'Export failed:',
+    emptyState: 'Write a diagram to see it rendered',
+    emptyStateHint: 'Pick an example above to get started',
   },
   ruleOfThree: {
     title: 'Rule of Three',

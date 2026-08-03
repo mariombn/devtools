@@ -6,6 +6,7 @@ import { TextComparator } from '@/pages/TextComparator'
 import { BcryptGenerator } from '@/pages/BcryptGenerator'
 import { CryptoToolkit } from '@/pages/CryptoToolkit'
 import { MarkdownPreview } from '@/pages/MarkdownPreview'
+import { MermaidDiagrams } from '@/pages/MermaidDiagrams'
 import { SqlTools } from '@/pages/SqlTools'
 import { Validators } from '@/pages/Validators'
 import { DatesToolkit } from '@/pages/DatesToolkit'
@@ -73,6 +74,14 @@ function App() {
           element={
             <MainLayout title={t('nav.markdownPreview')} fullWidth>
               <MarkdownPreview />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/mermaid"
+          element={
+            <MainLayout title={t('nav.mermaidDiagrams')} fullWidth>
+              <MermaidDiagrams />
             </MainLayout>
           }
         />

@@ -3,10 +3,12 @@ import {
   FileImage,
   FileCode2,
   Loader2,
+  Maximize,
+  Maximize2,
+  Minimize,
   Minus,
   Plus,
   Trash2,
-  Maximize2,
 } from 'lucide-react'
 import { PageTitle } from '@/components/Common/PageTitle'
 import { Button } from '@/components/ui/button'
@@ -25,6 +27,10 @@ const RENDER_DEBOUNCE_MS = 400
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 5
 const ZOOM_STEP = 1.25
+const MIN_SPLIT = 20
+const MAX_SPLIT = 80
+const DEFAULT_SPLIT = 50
+const DESKTOP_QUERY = '(min-width: 64rem)'
 
 /** Concrete backdrop colors — a canvas fill cannot resolve CSS variables. */
 const BACKGROUND_COLORS = { light: '#ffffff', dark: '#0a0a0a' } as const
@@ -39,6 +45,10 @@ const INITIAL_VIEW: ViewState = { zoom: 1, x: 0, y: 0 }
 
 function clampZoom(zoom: number): number {
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom))
+}
+
+function clampSplit(value: number): number {
+  return Math.min(MAX_SPLIT, Math.max(MIN_SPLIT, value))
 }
 
 export function MermaidDiagrams() {
@@ -57,9 +67,14 @@ export function MermaidDiagrams() {
   const [transparent, setTransparent] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const [exportError, setExportError] = useState<string | null>(null)
+  const [splitRatio, setSplitRatio] = useLocalStorage('mermaid-split-ratio', DEFAULT_SPLIT)
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const viewportRef = useRef<HTMLDivElement>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
+  const splitContainerRef = useRef<HTMLDivElement>(null)
+  const splitDragPointerId = useRef<number | null>(null)
 
   // ── Rendering ────────────────────────────────────────────────────────────
 
@@ -98,6 +113,22 @@ export function MermaidDiagrams() {
       clearTimeout(timer)
     }
   }, [code, mode])
+
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY)
+    const handleChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches)
+    mql.addEventListener('change', handleChange)
+    return () => mql.removeEventListener('change', handleChange)
+  }, [])
+
+  useEffect(() => {
+    if (!isFullscreen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsFullscreen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isFullscreen])
 
   // ── Zoom & pan ───────────────────────────────────────────────────────────
 
@@ -170,6 +201,30 @@ export function MermaidDiagrams() {
 
   const resetView = () => setView(INITIAL_VIEW)
 
+  const handleSplitPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return
+    event.currentTarget.setPointerCapture(event.pointerId)
+    splitDragPointerId.current = event.pointerId
+  }
+
+  const handleSplitPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (splitDragPointerId.current !== event.pointerId) return
+    const rect = splitContainerRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const ratio = ((event.clientX - rect.left) / rect.width) * 100
+    setSplitRatio(clampSplit(ratio))
+  }
+
+  const handleSplitPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (splitDragPointerId.current !== event.pointerId) return
+    event.currentTarget.releasePointerCapture(event.pointerId)
+    splitDragPointerId.current = null
+  }
+
+  const resetSplit = () => setSplitRatio(DEFAULT_SPLIT)
+
+  const toggleFullscreen = () => setIsFullscreen((prev) => !prev)
+
   // ── Actions ──────────────────────────────────────────────────────────────
 
   const loadExample = (source: string) => {
@@ -214,9 +269,15 @@ export function MermaidDiagrams() {
     <div className="flex size-full flex-col overflow-hidden">
       <PageTitle description={t('mermaid.description')}>{t('mermaid.title')}</PageTitle>
 
-      <div className="flex flex-1 flex-col gap-6 overflow-hidden lg:flex-row">
-        {/* Editor */}
-        <div className="flex flex-col gap-3 overflow-hidden lg:w-1/2">
+      <div
+        ref={splitContainerRef}
+        className="flex flex-1 flex-col gap-6 overflow-hidden lg:flex-row lg:gap-0"
+      >
+        {!isFullscreen && (
+        <div
+          className="flex flex-col gap-3 overflow-hidden"
+          style={isDesktop ? { width: `${splitRatio}%` } : undefined}
+        >
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-base font-semibold text-foreground">
               {t('mermaid.editorTitle')}
@@ -259,9 +320,33 @@ export function MermaidDiagrams() {
             className="min-h-64 flex-1 resize-none font-mono text-sm focus-visible:border-border focus-visible:ring-0"
           />
         </div>
+        )}
+
+        {!isFullscreen && isDesktop && (
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label={t('mermaid.resizeSplit')}
+            title={t('mermaid.resizeSplit')}
+            onPointerDown={handleSplitPointerDown}
+            onPointerMove={handleSplitPointerMove}
+            onPointerUp={handleSplitPointerUp}
+            onPointerCancel={handleSplitPointerUp}
+            onDoubleClick={resetSplit}
+            className="group relative flex w-3 shrink-0 cursor-col-resize touch-none items-center justify-center"
+          >
+            <div className="h-full w-px bg-border transition-colors group-hover:bg-primary/60 group-active:bg-primary" />
+          </div>
+        )}
 
         {/* Preview */}
-        <div className="flex flex-col overflow-hidden rounded-lg border border-border bg-muted/40 lg:w-1/2">
+        <div
+          className={cn(
+            'flex flex-col overflow-hidden',
+            isFullscreen ? 'fixed inset-0 z-[60] bg-background' : 'rounded-lg border border-border bg-muted/40'
+          )}
+          style={!isFullscreen && isDesktop ? { width: `${100 - splitRatio}%` } : undefined}
+        >
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-muted-foreground">
@@ -308,6 +393,16 @@ export function MermaidDiagrams() {
                 title={t('mermaid.resetView')}
               >
                 <Maximize2 className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7"
+                onClick={toggleFullscreen}
+                aria-label={isFullscreen ? t('mermaid.exitFullscreen') : t('mermaid.enterFullscreen')}
+                title={isFullscreen ? t('mermaid.exitFullscreen') : t('mermaid.enterFullscreen')}
+              >
+                {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
               </Button>
             </div>
           </div>

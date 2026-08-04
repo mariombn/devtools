@@ -30,7 +30,7 @@ const ZOOM_STEP = 1.25
 const MIN_SPLIT = 20
 const MAX_SPLIT = 80
 const DEFAULT_SPLIT = 50
-const DESKTOP_QUERY = '(min-width: 1024px)'
+const DESKTOP_QUERY = '(min-width: 64rem)'
 
 /** Concrete backdrop colors — a canvas fill cannot resolve CSS variables. */
 const BACKGROUND_COLORS = { light: '#ffffff', dark: '#0a0a0a' } as const
@@ -342,8 +342,8 @@ export function MermaidDiagrams() {
         {/* Preview */}
         <div
           className={cn(
-            'flex flex-col overflow-hidden bg-muted/40',
-            isFullscreen ? 'fixed inset-0 z-[60]' : 'rounded-lg border border-border'
+            'flex flex-col overflow-hidden',
+            isFullscreen ? 'fixed inset-0 z-[60] bg-background' : 'rounded-lg border border-border bg-muted/40'
           )}
           style={!isFullscreen && isDesktop ? { width: `${100 - splitRatio}%` } : undefined}
         >

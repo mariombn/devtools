@@ -328,6 +328,8 @@ export const pt: Translations = {
     emptyState: 'Escreva um diagrama para ver a renderização',
     emptyStateHint: 'Escolha um exemplo acima para começar',
     resizeSplit: 'Arraste para redimensionar',
+    enterFullscreen: 'Tela cheia',
+    exitFullscreen: 'Sair da tela cheia',
   },
 
   // ── Rule of Three ──────────────────────────────────────────────────────────

@@ -3,10 +3,12 @@ import {
   FileImage,
   FileCode2,
   Loader2,
+  Maximize,
+  Maximize2,
+  Minimize,
   Minus,
   Plus,
   Trash2,
-  Maximize2,
 } from 'lucide-react'
 import { PageTitle } from '@/components/Common/PageTitle'
 import { Button } from '@/components/ui/button'
@@ -67,6 +69,7 @@ export function MermaidDiagrams() {
   const [exportError, setExportError] = useState<string | null>(null)
   const [splitRatio, setSplitRatio] = useLocalStorage('mermaid-split-ratio', DEFAULT_SPLIT)
   const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const viewportRef = useRef<HTMLDivElement>(null)
   const diagramRef = useRef<HTMLDivElement>(null)
@@ -117,6 +120,15 @@ export function MermaidDiagrams() {
     mql.addEventListener('change', handleChange)
     return () => mql.removeEventListener('change', handleChange)
   }, [])
+
+  useEffect(() => {
+    if (!isFullscreen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsFullscreen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isFullscreen])
 
   // ── Zoom & pan ───────────────────────────────────────────────────────────
 
@@ -211,6 +223,8 @@ export function MermaidDiagrams() {
 
   const resetSplit = () => setSplitRatio(DEFAULT_SPLIT)
 
+  const toggleFullscreen = () => setIsFullscreen((prev) => !prev)
+
   // ── Actions ──────────────────────────────────────────────────────────────
 
   const loadExample = (source: string) => {
@@ -259,7 +273,7 @@ export function MermaidDiagrams() {
         ref={splitContainerRef}
         className="flex flex-1 flex-col gap-6 overflow-hidden lg:flex-row lg:gap-0"
       >
-        {/* Editor */}
+        {!isFullscreen && (
         <div
           className="flex flex-col gap-3 overflow-hidden"
           style={isDesktop ? { width: `${splitRatio}%` } : undefined}
@@ -306,8 +320,9 @@ export function MermaidDiagrams() {
             className="min-h-64 flex-1 resize-none font-mono text-sm focus-visible:border-border focus-visible:ring-0"
           />
         </div>
+        )}
 
-        {isDesktop && (
+        {!isFullscreen && isDesktop && (
           <div
             role="separator"
             aria-orientation="vertical"
@@ -326,8 +341,11 @@ export function MermaidDiagrams() {
 
         {/* Preview */}
         <div
-          className="flex flex-col overflow-hidden rounded-lg border border-border bg-muted/40"
-          style={isDesktop ? { width: `${100 - splitRatio}%` } : undefined}
+          className={cn(
+            'flex flex-col overflow-hidden bg-muted/40',
+            isFullscreen ? 'fixed inset-0 z-[60]' : 'rounded-lg border border-border'
+          )}
+          style={!isFullscreen && isDesktop ? { width: `${100 - splitRatio}%` } : undefined}
         >
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5">
             <div className="flex items-center gap-2">
@@ -375,6 +393,16 @@ export function MermaidDiagrams() {
                 title={t('mermaid.resetView')}
               >
                 <Maximize2 className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7"
+                onClick={toggleFullscreen}
+                aria-label={isFullscreen ? t('mermaid.exitFullscreen') : t('mermaid.enterFullscreen')}
+                title={isFullscreen ? t('mermaid.exitFullscreen') : t('mermaid.enterFullscreen')}
+              >
+                {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
               </Button>
             </div>
           </div>

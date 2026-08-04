@@ -327,6 +327,7 @@ export const pt: Translations = {
     exportError: 'Falha na exportação:',
     emptyState: 'Escreva um diagrama para ver a renderização',
     emptyStateHint: 'Escolha um exemplo acima para começar',
+    resizeSplit: 'Arraste para redimensionar',
   },
 
   // ── Rule of Three ──────────────────────────────────────────────────────────

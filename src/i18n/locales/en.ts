@@ -295,6 +295,7 @@ export type Translations = {
     exportError: string
     emptyState: string
     emptyStateHint: string
+    resizeSplit: string
   }
   ruleOfThree: {
     title: string
@@ -617,6 +618,7 @@ export const en: Translations = {
     exportError: 'Export failed:',
     emptyState: 'Write a diagram to see it rendered',
     emptyStateHint: 'Pick an example above to get started',
+    resizeSplit: 'Drag to resize',
   },
   ruleOfThree: {
     title: 'Rule of Three',

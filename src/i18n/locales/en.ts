@@ -275,6 +275,10 @@ export type Translations = {
     editorTitle: string
     previewTitle: string
     placeholder: string
+    viewMode: string
+    raw: string
+    rendered: string
+    sideBySide: string
   }
   mermaid: {
     title: string
@@ -600,6 +604,10 @@ export const en: Translations = {
     editorTitle: 'Editor',
     previewTitle: 'Preview',
     placeholder: 'Type your markdown here...',
+    viewMode: 'View mode',
+    raw: 'Raw',
+    rendered: 'Rendered',
+    sideBySide: 'Side by side',
   },
   mermaid: {
     title: 'Mermaid Diagrams',

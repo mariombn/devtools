@@ -307,6 +307,10 @@ export const pt: Translations = {
     editorTitle: 'Editor',
     previewTitle: 'Visualização',
     placeholder: 'Digite seu markdown aqui...',
+    viewMode: 'Modo de visualização',
+    raw: 'Raw',
+    rendered: 'Renderizado',
+    sideBySide: 'Lado a lado',
   },
   mermaid: {
     title: 'Diagramas Mermaid',

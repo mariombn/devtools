@@ -2,8 +2,10 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { Code2, Columns2, Eye } from 'lucide-react'
 import { PageTitle } from '@/components/Common/PageTitle'
 import { Textarea } from '@/components/ui/textarea'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useLanguage } from '@/i18n/LanguageContext'
 
@@ -61,71 +63,102 @@ function hello(name) {
 **Comece a editar para ver suas próprias mudanças!**
 `
 
+type ViewMode = 'raw' | 'rendered' | 'split'
+
 export function MarkdownPreview() {
   const { t } = useLanguage()
   const [markdown, setMarkdown] = useLocalStorage('markdown-input', defaultMarkdown)
+  const [viewMode, setViewMode] = useLocalStorage<ViewMode>('markdown-view-mode', 'split')
   const isDark = document.documentElement.classList.contains('dark')
 
   return (
     <div className="flex size-full flex-col overflow-hidden">
       <PageTitle description={t('markdown.description')}>{t('markdown.title')}</PageTitle>
-      
+
+      <ToggleGroup
+        value={viewMode}
+        onValueChange={(value) => setViewMode(value as ViewMode)}
+        aria-label={t('markdown.viewMode')}
+        className="mb-4 w-fit shrink-0"
+      >
+        <ToggleGroupItem value="raw">
+          <Code2 className="size-4" />
+          {t('markdown.raw')}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="rendered">
+          <Eye className="size-4" />
+          {t('markdown.rendered')}
+        </ToggleGroupItem>
+        <ToggleGroupItem value="split">
+          <Columns2 className="size-4" />
+          {t('markdown.sideBySide')}
+        </ToggleGroupItem>
+      </ToggleGroup>
+
       <div className="flex flex-1 gap-6 overflow-hidden">
         {/* Editor */}
-        <div className="flex w-1/2 flex-col gap-3 overflow-hidden">
-          <h3 className="text-base font-semibold text-foreground">{t('markdown.editorTitle')}</h3>
-          <Textarea
-            value={markdown}
-            onChange={(e) => setMarkdown(e.target.value)}
-            placeholder={t('markdown.placeholder')}
-            className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
-          />
-        </div>
+        {viewMode !== 'rendered' && (
+          <div
+            className={`flex flex-col gap-3 overflow-hidden ${viewMode === 'split' ? 'w-1/2' : 'w-full'}`}
+          >
+            <h3 className="text-base font-semibold text-foreground">{t('markdown.editorTitle')}</h3>
+            <Textarea
+              value={markdown}
+              onChange={(e) => setMarkdown(e.target.value)}
+              placeholder={t('markdown.placeholder')}
+              className="flex-1 resize-none font-mono text-sm focus-visible:ring-0 focus-visible:border-border"
+            />
+          </div>
+        )}
 
         {/* Preview */}
-        <div className="flex w-1/2 flex-col overflow-hidden rounded-lg border border-border bg-muted/40">
-          <div className="flex shrink-0 items-center border-b border-border px-4 py-2.5">
-            <span className="text-sm font-medium text-muted-foreground">{t('markdown.previewTitle')}</span>
-          </div>
-          <div className="flex-1 overflow-auto px-8 pb-8 pt-4">
-            <div className="markdown-preview">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  code(props: any) {
-                    const { inline, className, children, ...rest } = props
-                    const match = /language-(\w+)/.exec(className || '')
-                    const language = match ? match[1] : ''
+        {viewMode !== 'raw' && (
+          <div
+            className={`flex flex-col overflow-hidden rounded-lg border border-border bg-muted/40 ${viewMode === 'split' ? 'w-1/2' : 'w-full'}`}
+          >
+            <div className="flex shrink-0 items-center border-b border-border px-4 py-2.5">
+              <span className="text-sm font-medium text-muted-foreground">{t('markdown.previewTitle')}</span>
+            </div>
+            <div className="flex-1 overflow-auto px-8 pb-8 pt-4">
+              <div className="markdown-preview">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    code(props: any) {
+                      const { inline, className, children, ...rest } = props
+                      const match = /language-(\w+)/.exec(className || '')
+                      const language = match ? match[1] : ''
 
-                    return !inline && language ? (
-                      <SyntaxHighlighter
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        style={(isDark ? vscDarkPlus : vs) as any}
-                        language={language}
-                        PreTag="div"
-                        customStyle={{
-                          margin: 0,
-                          padding: '1em',
-                          fontSize: '0.875em',
-                        }}
-                        {...rest}
-                      >
-                        {String(children).replace(/\n$/, '')}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className={className} {...rest}>
-                        {children}
-                      </code>
-                    )
-                  }
-                }}
-              >
-                {markdown}
-              </ReactMarkdown>
+                      return !inline && language ? (
+                        <SyntaxHighlighter
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          style={(isDark ? vscDarkPlus : vs) as any}
+                          language={language}
+                          PreTag="div"
+                          customStyle={{
+                            margin: 0,
+                            padding: '1em',
+                            fontSize: '0.875em',
+                          }}
+                          {...rest}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...rest}>
+                          {children}
+                        </code>
+                      )
+                    }
+                  }}
+                >
+                  {markdown}
+                </ReactMarkdown>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
 

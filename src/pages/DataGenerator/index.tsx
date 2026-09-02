@@ -26,6 +26,8 @@ import { generatePassword } from '@/utils/generators/passwordGenerator'
 import { generateLorem } from '@/utils/generators/loremGenerator'
 import type { LoremType } from '@/utils/generators/loremGenerator'
 import { useLanguage } from '@/i18n/LanguageContext'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { InternationalGenerator } from './InternationalGenerator'
 
 export function DataGenerator() {
   const { t } = useLanguage()
@@ -104,15 +106,22 @@ export function DataGenerator() {
 
   return (
     <div>
-      <div className="flex justify-between items-start">
+      <PageTitle description={t('generator.description')}>{t('generator.title')}</PageTitle>
 
-        <PageTitle description={t('generator.description')}>{t('generator.title')}</PageTitle>
-        <Button size="lg" onClick={handleGenerateAll} className="shrink-0">
-          {t('generator.generateAll')}
-        </Button>
-      </div>
+      <Tabs defaultValue="brazil" className="gap-6">
+        <TabsList>
+          <TabsTrigger value="brazil">{t('generator.brazilTab')}</TabsTrigger>
+          <TabsTrigger value="international">{t('generator.internationalTab')}</TabsTrigger>
+        </TabsList>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+        <TabsContent value="brazil" className="space-y-6">
+          <div className="flex justify-end">
+            <Button size="lg" onClick={handleGenerateAll} className="shrink-0">
+              {t('generator.generateAll')}
+            </Button>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
         {/* CPF */}
         <GeneratorCard
           title="CPF"
@@ -357,7 +366,13 @@ export function DataGenerator() {
             }
           />
         </div>
-      </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="international">
+          <InternationalGenerator />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

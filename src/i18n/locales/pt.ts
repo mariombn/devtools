@@ -78,7 +78,7 @@ export const pt: Translations = {
   // ── Data Generator ─────────────────────────────────────────────────────────
   generator: {
     title: 'Gerador de Dados',
-    description: 'Gere CPF, CNPJ, telefone, CEP, nomes, e-mails e senhas.',
+    description: 'Gere documentos, telefones, códigos postais e dados de teste brasileiros e internacionais.',
     generateAll: 'Gerar Tudo',
     formatted: 'Formatado',
     mobile: 'Celular',
@@ -87,6 +87,14 @@ export const pt: Translations = {
     paragraphs: 'Parágrafos',
     sentences: 'Frases',
     words: 'Palavras',
+    brazilTab: 'Brasil',
+    internationalTab: 'Internacional',
+    country: 'País',
+    documentType: 'Tipo de documento',
+    document: 'Documento',
+    phone: 'Telefone',
+    postalCode: 'Código postal',
+    internationalHint: 'Os valores gerados seguem os formatos de validação informados e são destinados apenas a desenvolvimento e testes.',
   },
 
   // ── Text Comparator ────────────────────────────────────────────────────────

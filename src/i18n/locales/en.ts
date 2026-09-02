@@ -74,6 +74,14 @@ export type Translations = {
     paragraphs: string
     sentences: string
     words: string
+    brazilTab: string
+    internationalTab: string
+    country: string
+    documentType: string
+    document: string
+    phone: string
+    postalCode: string
+    internationalHint: string
   }
   diff: {
     title: string
@@ -394,7 +402,7 @@ export const en: Translations = {
   },
   generator: {
     title: 'Data Generator',
-    description: 'Generate CPF, CNPJ, phone, CEP, names, emails, and passwords.',
+    description: 'Generate Brazilian and international documents, phone numbers, postal codes, and test data.',
     generateAll: 'Generate All',
     formatted: 'Formatted',
     mobile: 'Mobile',
@@ -403,6 +411,14 @@ export const en: Translations = {
     paragraphs: 'Paragraphs',
     sentences: 'Sentences',
     words: 'Words',
+    brazilTab: 'Brazil',
+    internationalTab: 'International',
+    country: 'Country',
+    documentType: 'Document type',
+    document: 'Document',
+    phone: 'Phone',
+    postalCode: 'Postal code',
+    internationalHint: 'Generated values follow the validation formats provided and are intended for development and testing only.',
   },
   diff: {
     title: 'Text Comparator',

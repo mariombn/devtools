@@ -36,6 +36,7 @@ export function DataGenerator() {
 
   const [cnpj, setCnpj] = useState('')
   const [cnpjFormatted, setCnpjFormatted] = useState(true)
+  const [cnpjWithLetters, setCnpjWithLetters] = useState(false)
 
   const [phone, setPhone] = useState('')
   const [phoneType, setPhoneType] = useState<PhoneType>('mobile')
@@ -62,7 +63,7 @@ export function DataGenerator() {
   const [loremCount, setLoremCount] = useState(3)
 
   const handleGenerateCpf = () => setCpf(generateCPF(cpfFormatted))
-  const handleGenerateCnpj = () => setCnpj(generateCNPJ(cnpjFormatted))
+  const handleGenerateCnpj = () => setCnpj(generateCNPJ(cnpjFormatted, cnpjWithLetters))
   const handleGeneratePhone = () =>
     setPhone(
       generatePhone({
@@ -149,15 +150,27 @@ export function DataGenerator() {
           onGenerate={handleGenerateCnpj}
           icon={<Building2 />}
           options={
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="cnpj-format"
-                checked={cnpjFormatted}
-                onCheckedChange={(checked) =>
-                  setCnpjFormatted(checked === true)
-                }
-              />
-              {checkboxLabel('cnpj-format', t('generator.formatted'))}
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="cnpj-format"
+                  checked={cnpjFormatted}
+                  onCheckedChange={(checked) =>
+                    setCnpjFormatted(checked === true)
+                  }
+                />
+                {checkboxLabel('cnpj-format', t('generator.formatted'))}
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="cnpj-letters"
+                  checked={cnpjWithLetters}
+                  onCheckedChange={(checked) =>
+                    setCnpjWithLetters(checked === true)
+                  }
+                />
+                {checkboxLabel('cnpj-letters', t('generator.cnpjWithLetters'))}
+              </div>
             </div>
           }
         />

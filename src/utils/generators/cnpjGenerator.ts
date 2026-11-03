@@ -1,34 +1,43 @@
-export function generateCNPJ(formatted: boolean = true): string {
-  // Gera 8 dígitos aleatórios + 0001 (filial)
-  const randomDigits = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10));
-  const branchDigits = [0, 0, 0, 1]; // Primeira filial
-  const baseDigits = [...randomDigits, ...branchDigits];
+const ALPHANUMERIC = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const WEIGHTS_1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+const WEIGHTS_2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
 
-  // Calcula o primeiro dígito verificador
-  const weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-  let sum = 0;
-  for (let i = 0; i < 12; i++) {
-    sum += baseDigits[i] * weights1[i];
-  }
-  const remainder1 = sum % 11;
-  const digit1 = remainder1 < 2 ? 0 : 11 - remainder1;
+function checkDigit(value: string, weights: number[]): number {
+  const sum = [...value].reduce(
+    (total, character, index) =>
+      total + (character.charCodeAt(0) - 48) * weights[index],
+    0
+  )
+  const remainder = sum % 11
+  return remainder < 2 ? 0 : 11 - remainder
+}
 
-  // Calcula o segundo dígito verificador
-  const weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-  sum = 0;
-  for (let i = 0; i < 12; i++) {
-    sum += baseDigits[i] * weights2[i];
-  }
-  sum += digit1 * weights2[12];
-  const remainder2 = sum % 11;
-  const digit2 = remainder2 < 2 ? 0 : 11 - remainder2;
-
-  const cnpjArray = [...baseDigits, digit1, digit2];
-  const cnpj = cnpjArray.join('');
-
-  if (formatted) {
-    return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+export function generateCNPJ(formatted: boolean = true, withLetters: boolean = false): string {
+  // Mantém a primeira filial (0001) e garante uma letra no modo alfanumérico.
+  const root = Array.from({ length: 8 }, () =>
+    ALPHANUMERIC[Math.floor(Math.random() * (withLetters ? ALPHANUMERIC.length : 10))]
+  )
+  if (withLetters) {
+    root[Math.floor(Math.random() * root.length)] =
+      LETTERS[Math.floor(Math.random() * LETTERS.length)]
   }
 
-  return cnpj;
+  const base = root.join('') + '0001'
+  const firstDigit = checkDigit(base, WEIGHTS_1)
+  const cnpj = base + firstDigit + checkDigit(base + firstDigit, WEIGHTS_2)
+
+  return formatted
+    ? cnpj.replace(/(.{2})(.{3})(.{3})(.{4})(\d{2})/, '$1.$2.$3/$4-$5')
+    : cnpj
+}
+
+export function validateCNPJ(cnpj: string): boolean {
+  const clean = cnpj.toUpperCase().replace(/[./-]/g, '')
+  if (!/^[A-Z0-9]{12}\d{2}$/.test(clean)) return false
+  if (/^(\d)\1{13}$/.test(clean)) return false
+
+  const base = clean.slice(0, 12)
+  const firstDigit = checkDigit(base, WEIGHTS_1)
+  return clean.slice(12) === `${firstDigit}${checkDigit(base + firstDigit, WEIGHTS_2)}`
 }

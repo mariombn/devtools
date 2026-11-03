@@ -68,6 +68,7 @@ export type Translations = {
     description: string
     generateAll: string
     formatted: string
+    cnpjWithLetters: string
     mobile: string
     ddd: string
     format: string
@@ -392,7 +393,7 @@ export const en: Translations = {
     cpfPlaceholder: '000.000.000-00 or numbers only',
     cnpjTitle: 'CNPJ Validator',
     cnpjDesc: 'Assesses format and mathematically verifies CNPJ check digits.',
-    cnpjPlaceholder: '00.000.000/0000-00 or numbers only',
+    cnpjPlaceholder: '00.000.000/0000-00 or 12.ABC.345/01DE-35',
     emailTitle: 'Email Validator',
     emailDesc: 'Checks if the email string adheres to common email string layout.',
     emailPlaceholder: 'example@domain.com',
@@ -405,6 +406,7 @@ export const en: Translations = {
     description: 'Generate Brazilian and international documents, phone numbers, postal codes, and test data.',
     generateAll: 'Generate All',
     formatted: 'Formatted',
+    cnpjWithLetters: 'With letters',
     mobile: 'Mobile',
     ddd: 'DDD',
     format: 'Format',
